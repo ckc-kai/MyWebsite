@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaicheng (Kai) Chu Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-logo">{SYSTEM_LOG}</div>
+        <ul class="nav-menu">
+            <li><a href="#entry" class="nav-link">01 // OVERVIEW</a></li>
+            <li><a href="#professional" class="nav-link">02 // EXPERIENCE</a></li>
+            <li><a href="#biography" class="nav-link">03 // ME</a></li>
+            <li><a href="#timeline" class="nav-link">04 // TIMELINE</a></li>
+            <li><a href="#gallery" class="nav-link">05 // IMPORTANT!</a></li>
+        </ul>
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Section 01: Entry Point -->
+    <section id="entry" class="section entry-section">
+        <canvas id="particle-canvas"></canvas>
+        <div class="entry-content">
+            <div class="glitch-wrapper">
+                <h1 class="entry-title glitch" data-text="SYSTEM_INITIALIZED">SYSTEM_INITIALIZED</h1>
+            </div>
+            <p class="entry-subtitle">User Name:Kaicheng (Kai) Chu</p>
+            <p class="entry-description">Engineer // Data // Development</p>
+            <div class="entry-stats">
+                <div class="stat-item stat-item-progress">
+                    <span class="stat-value" id="day-progress-value">0%</span>
+                    <span class="stat-label">DAY_PROGRESS</span>
+                    <div class="day-progress-bar">
+                        <div class="day-progress-fill" id="day-progress-fill"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">4+</span>
+                    <span class="stat-label">YEARS_ACTIVE</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">∞</span>
+                    <span class="stat-label">LEARNING_MODE</span>
+                </div>
+            </div>
+            <a href="#professional" class="cta-button">
+                <span>READ_ME</span>
+                <div class="button-glow"></div>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL_DOWN</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Section 02: Professional Core -->
+    <section id="professional" class="section professional-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="section-number">02 //</span> PROFESSIONAL_EXPERIENCES
+            </h2>
+
+            <!-- Experiences -->
+            <div class="subsection">
+                <h3 class="subsection-title">{'INTERNSHIP'}</h3>
+                <div class="experiences-grid">
+                    <div class="experience-card">
+                        <div class="card-header">
+                            <div class="card-icon">⚡</div>
+                            <div class="card-title-group">
+                                <h4 class="card-title">DATA ENGINEER</h4>
+                                <p class="card-company">Chengdu Jifeng Elf Artificial Intelligence Technology</p>
+                            </div>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-duration">2025.6 - 2025.8</span>
+                            <span class="card-location">Sichuan, Chengdu</span>
+                        </div>
+                        <div class="card-content">
+                            <p>Built automated ETL pipelines processing 1000+ US/HK/CN stock filings: HTML→PDF→TOC→section
+                                embeddings→summary, enabling real-time investment insights; supported both daily scheduled 
+                                runs and per-stock queries.</p>
+
+                            <div class="card-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">POSTGRESQL</span>
+                                <span class="tag">ETL</span>
+                                <span class="tag">Automation</span>
+                            </div>
+                        </div>
+                        <div class="card-expand">+</div>
+                    </div>
+
+                    <div class="experience-card">
+                        <div class="card-header">
+                            <div class="card-icon">🚀</div>
+                            <div class="card-title-group">
+                                <h4 class="card-title">Researcher Asistant</h4>
+                                <p class="card-company">University of Virginia-Computer Science Department</p>
+                            </div>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-duration">2024.2 - 2025.8</span>
+                            <span class="card-location">Charlottesville, VA</span>
+                        </div>
+                        <div class="card-content">
+                            <p>Research on Individual + Team level predictors of project/course grades under Project-Based Learning Courses setting.</p>
+                            <div class="card-tags">
+                                <span class="tag">R</span>
+                                <span class="tag">Statistical Modeling</span>
+                                <span class="tag">EDA</span>
+                                <span class="tag">Data Visualization</span>
+                            </div>
+                        </div>
+                        <div class="card-expand">+</div>
+                    </div>
+
+                    <div class="experience-card">
+                        <div class="card-header">
+                            <div class="card-icon">💻</div>
+                            <div class="card-title-group">
+                                <h4 class="card-title">Full-stack Developer</h4>
+                                <p class="card-company">Zhejiang Pushkang Biotechnology Co.,ltd</p>
+                            </div>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-duration">2024.5 - 2024.8</span>
+                            <span class="card-location">Shaoxing, Zhejiang</span>
+                        </div>
+                        <div class="card-content">
+                            <p>Selected for a student career program featuring a team-based project competition to design and implement a company logging system from scratch, covering requirements elicitation, system design, development, beta testing, and final presentation.</p>
+                            <div class="card-tags">
+                                <span class="tag">Java</span>
+                                <span class="tag">MySQL</span>
+                                <span class="tag">HTML</span>
+                                <span class="tag">Testing</span>
+                            </div>
+                        </div>
+                        <div class="card-expand">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="subsection skills-subsection">
+                <h3 class="subsection-title">{'SKILL_MATRIX'}</h3>
+                <div class="skills-container">
+                    <div class="skill-category">
+                        <h4 class="category-title">PROGRAMMING</h4>
+                        <div class="skill-bars">
+                            <div class="skill-item" data-level="95">
+                                <div class="skill-info">
+                                    <span class="skill-name">Python</span>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="90">
+                                <div class="skill-info">
+                                    <span class="skill-name">SQL</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="88">
+                                <div class="skill-info">
+                                    <span class="skill-name">R</span>
+                                    <span class="skill-percentage">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="92">
+                                <div class="skill-info">
+                                    <span class="skill-name">JAVA</span>
+                                    <span class="skill-percentage">92%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 92%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h4 class="category-title">TOOLS_&_TECH</h4>
+                        <div class="skill-bars">
+                            <div class="skill-item" data-level="85">
+                                <div class="skill-info">
+                                    <span class="skill-name">Git / GitHub</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="80">
+                                <div class="skill-info">
+                                    <span class="skill-name">BASH/SHELL</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="87">
+                                <div class="skill-info">
+                                    <span class="skill-name">REST</span>
+                                    <span class="skill-percentage">87%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 87%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="75">
+                                <div class="skill-info">
+                                    <span class="skill-name">Cloud(OSS)</span>
+                                    <span class="skill-percentage">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h4 class="category-title">KNOWLEDGE</h4>
+                        <div class="skill-bars">
+                            <div class="skill-item" data-level="82">
+                                <div class="skill-info">
+                                    <span class="skill-name">Machine Learning</span>
+                                    <span class="skill-percentage">82%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="78">
+                                <div class="skill-info">
+                                    <span class="skill-name">Deep Learning</span>
+                                    <span class="skill-percentage">78%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="85">
+                                <div class="skill-info">
+                                    <span class="skill-name">Statistical Analysis</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-level="80">
+                                <div class="skill-info">
+                                    <span class="skill-name">A/B Testing</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 03: Biography -->
+    <section id="biography" class="section biography-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="section-number">03 //</span> BIOGRAPHY_DATA
+            </h2>
+
+            <div class="bio-grid">
+                <!-- About Me -->
+                <div class="bio-card">
+                    <div class="bio-header">
+                        <div class="bio-icon">👤</div>
+                        <h3 class="bio-title">ABOUT_ME</h3>
+                    </div>
+                    <div class="bio-content">
+                        <p>Currently pursuing a Data Science Master Degree, seeking to leverage Python, SQL, and advanced analytics to drive data-
+                            informed business decisions, with a strong foundational knowledge in Computer Science, Statistics, and Data Science.</p>
+
+                        <p>To be Continued!</p>
+
+                        <p>"Don't let the noise of others' opinions drown out your own inner voice. And most important, have the courage to follow your heart and intuition." - Steve Jobs</p>
+                        <p>要么及时改正，要么执迷不悟一辈子</p>
+                        <div class="bio-highlights">
+                            <div class="highlight-item">
+                                <span class="highlight-icon">🎯</span>
+                                <span>Detail-oriented perfectionist</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-icon">🌐</span>
+                                <span>Faster Learner</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-icon">🚀</span>
+                                <span>Innovation enthusiast</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="bio-card">
+                    <div class="bio-header">
+                        <div class="bio-icon">🎓</div>
+                        <h3 class="bio-title">EDUCATION</h3>
+                    </div>
+                    <div class="bio-content">
+                        <div class="education-item">
+                            <h4 class="edu-degree">Bachelor of Science in Computer Science</h4>
+                            <h4 class="edu-degree">Bachelor of Science in Statistics</h4>
+                            <p class="edu-school">University of Virginia</p>
+                            <p class="edu-duration">2021 - 2025</p>
+                            <p class="edu-description">Specialized in Machine Learning, Algorithm, Data Analysis</p>
+                        </div>
+                        <div class="education-item">
+                            <h4 class="edu-degree">Master of Science in Data Science</h4>
+                            <p class="edu-school">Unicersity of California, Los Angeles</p>
+                            <p class="edu-duration">2025 - present</p>
+                            <p class="edu-description">Focus on Advanced/Large-scale machine learning, deep learning, and distributed systems</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+
+                <!-- Interests -->
+                <div class="bio-card">
+                    <div class="bio-header">
+                        <div class="bio-icon">⚡</div>
+                        <h3 class="bio-title">INTERESTS</h3>
+                    </div>
+                    <div class="bio-content">
+                        <div class="interests-grid">
+                            <div class="interest-tag">Cybersecurity</div>
+                            <div class="interest-tag">AI/ML Integration</div>
+                            <div class="interest-tag">Deep Learning</div>
+                            <div class="interest-tag">Performance Optimization</div>
+                            <div class="interest-tag">Database</div>
+                            <div class="interest-tag">Tennis🎾</div>
+                            <div class="interest-tag">Reading📖</div>
+                            <div class="interest-tag">Gym🏋️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 04: Journey Log (Timeline) -->
+    <section id="timeline" class="section timeline-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="section-number">04 //</span> LOG_HISTORY
+            </h2>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+            
+                <div class="timeline-item" data-year="2020">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2009.09 - 2015.06</span>
+                        <h4 class="timeline-title">JinDuTianChang Elementary School</h4>
+                            <span class="tag">Zhejiang, China</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2021">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2015.09 - 2018.06</span>
+                        <h4 class="timeline-title">Jian Lan Middle School</h4>
+                        <div class="timeline-tags">
+                            <span class="tag">Middle School</span>
+                            <span class="tag">Zhejiang, China</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2022">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2018.08 - 2019.05</span>
+                        <h4 class="timeline-title">Chapin High School</h4>
+                        <div class="timeline-tags">
+                            <span class="tag">High School</span>
+                            <span class="tag">Exchange</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2022">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2019.08 - 2021.05</span>
+                        <h4 class="timeline-title">Miller School of Albermarle</h4>
+                        <p class="timeline-description">Led complete frontend architecture overhaul, improving performance by 300% and reducing bundle size by 40%. Recognized with company innovation award.</p>
+                        <div class="timeline-tags">
+                            <span class="tag">High School</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2023">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2021.08 - 2025.05</span>
+                        <h4 class="timeline-title">University of Virginia</h4>
+                        <div class="timeline-tags">
+                            <span class="tag">Bachelor</span>
+                            <span class="tag">CS+Statistics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2024">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2025.09 - PRESENT</span>
+                        <h4 class="timeline-title">UCLA Master of Engineering</h4>
+                            <span class="tag">Master</span>
+                            <span class="tag">Data Science</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item active" data-year="2025">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2026 - FUTURE</span>
+                        <h4 class="timeline-title">To Be Eplored</h4>
+                        <p>Everthing is possible! Stay positive and keep learning!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 05: Visual Database (Photo Wall) -->
+    <section id="gallery" class="section gallery-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="section-number">05 //</span> VISUAL_DATABASE
+            </h2>
+
+            <div class="photo-wall">
+                <div class="photo-item" data-tilt style="--delay: 0.1s">
+                    <img src="pictures/p1.jpg" alt="Memory 01">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Sea Fishing</span>
+                    </div>
+                </div>
+
+                <div class="photo-item large" data-tilt style="--delay: 0.2s">
+                    <img src="pictures/p4.JPG" alt="Memory 02">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Happy Graduate!</span>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-tilt style="--delay: 0.3s">
+                    <img src="pictures/p2.JPG" alt="Memory 03">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Ocean</span>
+                    </div>
+                </div>
+
+                <div class="photo-item wide" data-tilt style="--delay: 0.4s">
+                    <img src="pictures/p3.JPG" alt="Memory 04">
+                    <div class="photo-overlay">
+                        <span class="photo-label">yxp!</span>
+                    </div>
+                </div>
+
+                <div class="photo-item large" data-tilt style="--delay: 0.5s">
+                    <img src="pictures/p5.JPG" alt="Memory 05">
+                    <div class="photo-overlay">
+                        <span class="photo-label">zjh!</span>
+                    </div>
+                </div>
+
+                <div class="photo-item tall" data-tilt style="--delay: 0.6s">
+                    <img src="pictures/p6.JPG" alt="Memory 06">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Bye UVA</span>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-tilt style="--delay: 0.7s">
+                    <img src="pictures/p8.JPG" alt="Memory 07">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Bros</span>
+                    </div>
+                </div>
+
+                <div class="photo-item large" data-tilt style="--delay: 0.8s">
+                    <img src="pictures/p7.JPG" alt="Memory 08">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Fam</span>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-tilt style="--delay: 0.9s">
+                    <img src="pictures/p10.JPG" alt="Memory 09">
+                    <div class="photo-overlay">
+                        <span class="photo-label">ckc</span>
+                    </div>
+                </div>
+
+                <div class="photo-item wide" data-tilt style="--delay: 1s">
+                    <img src="pictures/p9.JPG" alt="Memory 10">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Bros</span>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-tilt style="--delay: 1.1s">
+                    <img src="pictures/p11.JPG" alt="Memory 11">
+                    <div class="photo-overlay">
+                        <span class="photo-label">yxp!</span>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-tilt style="--delay: 1.2s">
+                    <img src="pictures/p12.JPG" alt="Memory 12">
+                    <div class="photo-overlay">
+                        <span class="photo-label">Hi Boston</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">CONNECT</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/kaicheng-chu-a96b6821b/" class="social-link">LinkedIn</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">SYSTEM_INFO</h4>
+                    <p class="footer-text">Nice to meet you!</p>
+                    <p class="footer-text">Version: 1.0.0 // Build: 2025.11.26</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">STATUS</h4>
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">ALL SYSTEMS OPERATIONAL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Kaicheng (Kai) Chu. All rights reserved. // SYSTEM_LOG</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
