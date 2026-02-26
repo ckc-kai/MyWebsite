@@ -4,18 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaicheng (Kai) Chu Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Boot Sequence Preloader -->
+    <div id="boot-sequence" class="boot-sequence">
+        <div class="boot-terminal">
+            <div id="boot-text"></div>
+            <div class="boot-cursor">_</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-follower"></div>
+
+    <!-- Noise Texture -->
+    <div class="bg-noise"></div>
+
     <!-- Navigation Bar -->
     <nav class="nav-bar">
         <div class="nav-logo">{SYSTEM_LOG}</div>
         <ul class="nav-menu">
             <li><a href="#entry" class="nav-link">01 // OVERVIEW</a></li>
             <li><a href="#professional" class="nav-link">02 // EXPERIENCE</a></li>
-            <li><a href="#biography" class="nav-link">03 // ME</a></li>
-            <li><a href="#timeline" class="nav-link">04 // TIMELINE</a></li>
-            <li><a href="#gallery" class="nav-link">05 // IMPORTANT!</a></li>
+            <li><a href="#projects" class="nav-link">03 // PROJECTS</a></li>
+            <li><a href="#biography" class="nav-link">04 // ME</a></li>
+            <li><a href="#timeline" class="nav-link">05 // TIMELINE</a></li>
+            <li><a href="#gallery" class="nav-link">06 // VISUAL</a></li>
         </ul>
         <div class="nav-toggle">
             <span></span>
@@ -32,7 +52,7 @@
                 <h1 class="entry-title glitch" data-text="SYSTEM_INITIALIZED">SYSTEM_INITIALIZED</h1>
             </div>
             <p class="entry-subtitle">User Name:Kaicheng (Kai) Chu</p>
-            <p class="entry-description">Engineer // Data // Development</p>
+            <p class="entry-description">Engineer // LLM// Data // Development</p>
             <div class="entry-stats">
                 <div class="stat-item stat-item-progress">
                     <span class="stat-value" id="day-progress-value">0%</span>
@@ -153,131 +173,136 @@
             <div class="subsection skills-subsection">
                 <h3 class="subsection-title">{'SKILL_MATRIX'}</h3>
                 <div class="skills-container">
+                    
                     <div class="skill-category">
-                        <h4 class="category-title">PROGRAMMING</h4>
-                        <div class="skill-bars">
-                            <div class="skill-item" data-level="95">
-                                <div class="skill-info">
-                                    <span class="skill-name">Python</span>
-                                    <span class="skill-percentage">95%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="90">
-                                <div class="skill-info">
-                                    <span class="skill-name">SQL</span>
-                                    <span class="skill-percentage">90%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="88">
-                                <div class="skill-info">
-                                    <span class="skill-name">R</span>
-                                    <span class="skill-percentage">88%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 88%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="92">
-                                <div class="skill-info">
-                                    <span class="skill-name">JAVA</span>
-                                    <span class="skill-percentage">92%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 92%"></div>
-                                </div>
-                            </div>
+                        <h4 class="category-title">Languages</h4>
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">SQL</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">R</span>
                         </div>
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">TOOLS_&_TECH</h4>
-                        <div class="skill-bars">
-                            <div class="skill-item" data-level="85">
-                                <div class="skill-info">
-                                    <span class="skill-name">Git / GitHub</span>
-                                    <span class="skill-percentage">85%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="80">
-                                <div class="skill-info">
-                                    <span class="skill-name">BASH/SHELL</span>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="87">
-                                <div class="skill-info">
-                                    <span class="skill-name">REST</span>
-                                    <span class="skill-percentage">87%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 87%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="75">
-                                <div class="skill-info">
-                                    <span class="skill-name">Cloud(OSS)</span>
-                                    <span class="skill-percentage">75%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 75%"></div>
-                                </div>
-                            </div>
+                        <h4 class="category-title">Data & ML Systems</h4>
+                        <div class="card-tags">
+                            <span class="tag">ETL pipelines</span>
+                            <span class="tag">async processing</span>
+                            <span class="tag">feature pipelines</span>
+                            <span class="tag">ML inference</span>
+                            <span class="tag">vector similarity search</span>
+                            <span class="tag">agent workflows</span>
                         </div>
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">KNOWLEDGE</h4>
-                        <div class="skill-bars">
-                            <div class="skill-item" data-level="82">
-                                <div class="skill-info">
-                                    <span class="skill-name">Machine Learning</span>
-                                    <span class="skill-percentage">82%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 82%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="78">
-                                <div class="skill-info">
-                                    <span class="skill-name">Deep Learning</span>
-                                    <span class="skill-percentage">78%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 78%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="85">
-                                <div class="skill-info">
-                                    <span class="skill-name">Statistical Analysis</span>
-                                    <span class="skill-percentage">85%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item" data-level="80">
-                                <div class="skill-info">
-                                    <span class="skill-name">A/B Testing</span>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 80%"></div>
-                                </div>
-                            </div>
+                        <h4 class="category-title">Data & Infra</h4>
+                        <div class="card-tags">
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">Milvus</span>
+                            <span class="tag">PySpark</span>
+                            <span class="tag">Docker</span>
                         </div>
                     </div>
+
+                    <div class="skill-category">
+                        <h4 class="category-title">Machine Learning / AI</h4>
+                        <div class="card-tags">
+                            <span class="tag">PyTorch</span>
+                            <span class="tag">scikit-learn</span>
+                            <span class="tag">NLP</span>
+                            <span class="tag">Computer Vision</span>
+                            <span class="tag">LLMs</span>
+                            <span class="tag">embeddings</span>
+                            <span class="tag">RAG</span>
+                            <span class="tag">LangChain</span>
+                            <span class="tag">LlamaIndex</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h4 class="category-title">Backend & Tools</h4>
+                        <div class="card-tags">
+                            <span class="tag">FastAPI</span>
+                            <span class="tag">Linux</span>
+                            <span class="tag">Bash</span>
+                            <span class="tag">Git</span>
+                            <span class="tag">cron scheduling</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 02.5: Projects -->
+    <section id="projects" class="section projects-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="section-number">03 //</span> PROJECT_DATABASE
+            </h2>
+            <div class="projects-grid">
+                <!-- Project Card Placeholder 1 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">[E-Commerce Customer Analytics & Conversion Optimization]</h3>
+                        <span class="project-status online">ARCHIVED</span>
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">PySpark</span>
+                        <span class="tech-badge">NLP</span>
+                        <span class="tech-badge">A/B Testing</span>
+                    </div>
+                    <ul class="project-desc-list">
+                        <li>Analyzed 1.3M+ user records from reviews, transactions, and marketing campaigns in an e-commerce environment. Delivered actionable insights linking text sentiment, engagement behavior, and conversion outcomes.</li>
+                        <li>Preprocessed and engineered features from large-scale structured and unstructured data (310K+ transactions, 560K+ reviews) using PySpark+Pandas for distributed data cleaning, EDA, and feature preprocessing.</li>
+                        <li>Applied NLP techniques (tokenization, N-Gram, TF-IDF vectorization) to extract product sentiment and reviewer satisfaction; trained Logistic Regression and Random Forest classifiers achieving AUC = 0.96.</li>
+                        <li>Built conversion rate prediction models with feature importance visualization to identify top-performing customer segments, boosting model performance from AUC = 0.84 → 0.93.</li>
+                        <li>Analyzed an A/B email experiment (480K users, 24 groups) using statistical hypothesis testing and time series analysis, revealing optimal campaign frequency and increasing open rate by 55%.</li>
+                    </ul>
+                </div>
+
+                <!-- Project Card Placeholder 2 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">[Real-time Emotion Recognition]</h3>
+                        <span class="project-status offline">ARCHIVED</span>
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Computer Vision</span>
+                        <span class="tech-badge">Deep Learning</span>
+                    </div>
+                    <ul class="project-desc-list">
+                        <li>Built a real-time emotion recognition application integrating OpenCV for face detection and PyTorch for deep neural network model.</li>
+                        <li>Fine-tuned a ResNet-169 pretrained on ImageNet by unfreezing final convolutional and fully connected layers; applied data augmentation, batch normalization, dropout, and cross-entropy loss optimization.</li>
+                        <li>Designed a custom dual-branch CNN (MultiScale EmotionCNN) combining 48×48 and 24×24 feature paths with adaptive pooling and fusion (2880-dim vector) for multi-scale facial feature extraction, achieving 65% test accuracy.</li>
+                        <li>Built an automated data preprocessing and augmentation pipeline (cropping, resizing, grayscale normalization) using torchvision.transforms.</li>
+                        <li>Achieved ~70% classification accuracy across 6 emotion classes (with fine-tuned ResNet-169); deployed a live webcam demo performing real-time face detection, passing into tensor transformation (model), resulting emotion label overlay.</li>
+                    </ul>
+                </div>
+
+                <!-- Project Card Placeholder 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">[Charlottesville Travel Planner]</h3>
+                        <span class="project-status online">ONLINE</span>
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">[Python-Django]</span>
+                        <span class="tech-badge">[Google API]</span>
+                        <span class="tech-badge">[HTML/CSS]</span>
+                        <span class="tech-badge">[Testing]</span>
+                    </div>
+                    <ul class="project-desc-list">
+                        <li>Engineered a travel review platform leveraging Python/Django (MVC architecture) and integrated Google Maps API for dynamic, location-based service rendering.</li>
+                        <li>Implemented secure user authentication via the Google Login API and designed a role-based authorization system (Admin/Regular User) to enhance data security and management efficiency.</li>
+                        <li>Developed a Travel Recommendation Algorithm that utilizes user preferences and available time constraints to generate optimized schedules via a custom distance-calculation and review score ranking algorithm.</li>
+                        <li>Developed a scalable review submission pipeline, validating user inputs and persisting data via a Django database.</li>
+                        <li>Conducted unit, system, tests, and GUI testing with Selenium, Gathered user feedback during a beta testing phase.</li>
+                    </ul>
+    
                 </div>
             </div>
         </div>
@@ -367,10 +392,28 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Terminal Component inside Biography -->
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span class="terminal-dot close"></span>
+                    <span class="terminal-dot minimize"></span>
+                    <span class="terminal-dot maximize"></span>
+                    <span class="terminal-title">guest@kc-system: ~</span>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-line">Welcome to KC_SYS Shell v1.0.0.</div>
+                    <div class="terminal-line">Type <span class="highlight">'help'</span> to see available commands.</div>
+                    <div class="terminal-input-line">
+                        <span class="prompt">guest@kc-system:~$</span>
+                        <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Section 04: Journey Log (Timeline) -->
+    <!-- Section 05: Journey Log (Timeline) -->
     <section id="timeline" class="section timeline-section">
         <div class="container">
             <h2 class="section-title">
@@ -381,46 +424,11 @@
                 <div class="timeline-line"></div>
 
             
-                <div class="timeline-item" data-year="2020">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2009.09 - 2015.06</span>
-                        <h4 class="timeline-title">JinDuTianChang Elementary School</h4>
-                            <span class="tag">Zhejiang, China</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-year="2021">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2015.09 - 2018.06</span>
-                        <h4 class="timeline-title">Jian Lan Middle School</h4>
-                        <div class="timeline-tags">
-                            <span class="tag">Middle School</span>
-                            <span class="tag">Zhejiang, China</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-year="2022">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2018.08 - 2019.05</span>
-                        <h4 class="timeline-title">Chapin High School</h4>
-                        <div class="timeline-tags">
-                            <span class="tag">High School</span>
-                            <span class="tag">Exchange</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="timeline-item" data-year="2022">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2019.08 - 2021.05</span>
                         <h4 class="timeline-title">Miller School of Albermarle</h4>
-                        <p class="timeline-description">Led complete frontend architecture overhaul, improving performance by 300% and reducing bundle size by 40%. Recognized with company innovation award.</p>
                         <div class="timeline-tags">
                             <span class="tag">High School</span>
                         </div>
@@ -434,7 +442,7 @@
                         <h4 class="timeline-title">University of Virginia</h4>
                         <div class="timeline-tags">
                             <span class="tag">Bachelor</span>
-                            <span class="tag">CS+Statistics</span>
+                            <span class="tag">CS & Statistics</span>
                         </div>
                     </div>
                 </div>
@@ -442,21 +450,59 @@
                 <div class="timeline-item" data-year="2024">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
+                        <span class="timeline-date">2024.02 - 2025.08</span>
+                        <h4 class="timeline-title">University of Virginia</h4>
+                        <p class="timeline-description">Researcher Assistant - Computer Science Department</p>
+                        <div class="timeline-tags">
+                            <span class="tag">Research</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2024">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2024.05 - 2024.08</span>
+                        <h4 class="timeline-title">Zhejiang Pushkang Biotechnology Co.,ltd</h4>
+                        <p class="timeline-description">Full-stack Developer Internship</p>
+                        <div class="timeline-tags">
+                            <span class="tag">Internship</span>
+                            <span class="tag">Developer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2025">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2025.06 - 2025.08</span>
+                        <h4 class="timeline-title">Chengdu Jifeng Elf Artificial Intelligence Technology</h4>
+                        <p class="timeline-description">Data Engineer Internship</p>
+                        <div class="timeline-tags">
+                            <span class="tag">Internship</span>
+                            <span class="tag">Data Engineer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-year="2025">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
                         <span class="timeline-date">2025.09 - PRESENT</span>
                         <h4 class="timeline-title">UCLA Master of Engineering</h4>
+                        <div class="timeline-tags">
                             <span class="tag">Master</span>
                             <span class="tag">Data Science</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="timeline-item active" data-year="2025">
+                <div class="timeline-item active" data-year="2026">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2026 - FUTURE</span>
-                        <h4 class="timeline-title">To Be Eplored</h4>
-                        <p>Everthing is possible! Stay positive and keep learning!</p>
-                        </div>
+                        <h4 class="timeline-title">To Be Explored</h4>
+                        <p class="timeline-description">Everything is possible! Stay positive and keep learning!</p>
                     </div>
                 </div>
             </div>
@@ -571,7 +617,7 @@
                 <div class="footer-section">
                     <h4 class="footer-title">SYSTEM_INFO</h4>
                     <p class="footer-text">Nice to meet you!</p>
-                    <p class="footer-text">Version: 1.0.0 // Build: 2025.11.26</p>
+                    <p class="footer-text">Version: 1.0.2 // Build: 2026.02.26</p>
                 </div>
                 <div class="footer-section">
                     <h4 class="footer-title">STATUS</h4>
