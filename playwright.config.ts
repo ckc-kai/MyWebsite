@@ -14,7 +14,9 @@ export default defineConfig({
     viewport: { width: 1440, height: 900 },
   },
   webServer: {
-    command: 'npm run dev',
+    // --ignore-lock keeps the server in the foreground, where Playwright can own it: Astro 7 sends it
+    // to the background on its own when an AI agent runs the command.
+    command: 'npm run dev -- --ignore-lock',
     url: `http://localhost:${PORT}/MyWebsite/`,
     reuseExistingServer: true,
   },

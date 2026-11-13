@@ -7,4 +7,7 @@ export default defineConfig({
   base: '/MyWebsite',
   server: { port: 4321 },
   devToolbar: { enabled: false },
+  // Astro 7 defaults to 'jsx', which drops the spaces between inline tags and moves text; keep the
+  // whitespace the pages were designed with.
+  compressHTML: true,
 });

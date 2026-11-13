@@ -37,6 +37,8 @@ tests/e2e/            Playwright (uses the machine's Chrome)
 
 ## Commands
 
+Needs Node 22.23.4 or later (Astro 7).
+
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Dev server at `http://localhost:4321/MyWebsite/` |
