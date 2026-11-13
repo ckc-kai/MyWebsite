@@ -130,6 +130,12 @@ const axisY = estimates.length * PLOT.rowHeight + 4;
     text-align: justify;
   }
 
+  /* English in a column this narrow justifies into rivers of space: set it ragged right, hyphenated. */
+  .paper__body:lang(en) {
+    text-align: left;
+    hyphens: auto;
+  }
+
   .paper__body b {
     margin-right: 0.7em;
     font-family: var(--font-display);

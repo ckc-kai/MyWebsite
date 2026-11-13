@@ -6,8 +6,3 @@ export function spreadMarks(total: number, marked: number): boolean[] {
   const count = Math.max(0, Math.min(total, Math.round(marked)));
   return Array.from({ length: total }, (_, index) => Math.floor(((index + 1) * count) / total) > Math.floor((index * count) / total));
 }
-
-/** Position on a ring of `count` slots, wrapping in both directions. */
-export function wrapIndex(index: number, count: number): number {
-  return ((index % count) + count) % count;
-}

@@ -45,6 +45,7 @@
 
 .west-lake figcaption {
   margin-top: -4px;
+  text-wrap: balance;
   font-family: var(--font-hand);
   font-size: 1.1875rem;
   line-height: 1.2;

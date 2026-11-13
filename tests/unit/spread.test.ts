@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { spreadMarks, wrapIndex } from '../../src/lib/spread';
+import { spreadMarks } from '../../src/lib/spread';
 
 const countMarked = (marks: boolean[]): number => marks.filter(Boolean).length;
 
@@ -24,13 +24,5 @@ describe('spreadMarks', () => {
     const marks = spreadMarks(100, 10);
     expect(countMarked(marks.slice(0, 50))).toBe(5);
     expect(countMarked(marks.slice(50))).toBe(5);
-  });
-});
-
-describe('wrapIndex', () => {
-  test('wraps past either end of the ring', () => {
-    expect(wrapIndex(16, 16)).toBe(0);
-    expect(wrapIndex(-1, 16)).toBe(15);
-    expect(wrapIndex(5, 16)).toBe(5);
   });
 });

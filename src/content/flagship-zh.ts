@@ -2,25 +2,9 @@
  * Copy for the three flagship figures. Each station is explained twice: once in plain words
  * anyone can follow, and once as a line of specification for a reader who builds these things.
  */
-import type { SemgStation } from '../components/anatomy/semg-figure';
-import type { DeskNode, DeskQuestion, Worker } from '../components/anatomy/desk-paths';
+import type { DeskStop, FlagshipCopy, SemgStop } from './types';
 
-interface SemgStop {
-  id: SemgStation;
-  name: string;
-  text: string;
-  spec: string;
-}
-
-interface DeskStop {
-  id: DeskNode;
-  name: string;
-  who: readonly Worker[];
-  text: string;
-  spec?: string;
-}
-
-export const FLAGSHIP_ZH = {
+export const FLAGSHIP_ZH: FlagshipCopy = {
   specLabel: '给工程师看的一行',
   swipe: '左右滑动，看整张图',
 
@@ -79,7 +63,10 @@ export const FLAGSHIP_ZH = {
       reset: '戴正',
       homeElectrode: 5,
       straight: '戴正的时候，这块肌肉的信号落在 5 号电极上。',
-      turned: ['腕带转了', '格，同一块肌肉的信号跑到了', '号电极。圆桌上亮的座位跟着挪了一格，但它和左右邻座的关系没变，模型认的是这个关系。'],
+      turned: {
+        one: '腕带转了 {n} 格，同一块肌肉的信号跑到了 {e} 号电极。圆桌上亮的座位跟着挪了一格，但它和左右邻座的关系没变，模型认的是这个关系。',
+        other: '腕带转了 {n} 格，同一块肌肉的信号跑到了 {e} 号电极。圆桌上亮的座位跟着挪了 {n} 格，但它和左右邻座的关系没变，模型认的是这个关系。',
+      },
     },
     versions: {
       label: '四个版本，每 100 个字符错几个',
@@ -102,13 +89,13 @@ export const FLAGSHIP_ZH = {
     who: {
       label: '这一步谁来做',
       all: '全部',
-      names: { model: '模型', code: '程序', human: '人' } satisfies Record<Worker, string>,
+      names: { model: '模型', code: '程序', human: '人' },
     },
     groups: [
       { name: '平时：把资料收进库', ids: ['pdf', 'sheet', 'cards', 'store'] },
       { name: '提问时', ids: ['ask', 'plan', 'find', 'docs', 'form', 'gates', 'compute', 'verify', 'answer'] },
       { name: '怎么知道它好不好', ids: ['eval'] },
-    ] satisfies ReadonlyArray<{ name: string; ids: readonly DeskNode[] }>,
+    ],
     stations: [
       {
         id: 'pdf',
@@ -268,7 +255,7 @@ export const FLAGSHIP_ZH = {
             '如实回答：这件事这里做不了，并说明原因。',
           ],
         },
-      ] satisfies ReadonlyArray<{ id: DeskQuestion; tag: string; text: string; steps: readonly string[] }>,
+      ],
     },
   },
 
@@ -334,4 +321,4 @@ export const FLAGSHIP_ZH = {
     schedule: '整条线每天定时自己跑一遍：上了锁，同一类任务同时只跑一个；上游写完「完成」的旗子，下游才开始；重跑不会重复入库。',
     scheduleSpec: 'crontab · flock · done 标记 · 幂等',
   },
-} as const;
+};

@@ -2,14 +2,17 @@
 import Journey from '../components/journey/Journey.astro';
 import Motto from '../components/site/Motto.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
-import { SITE_ZH as site } from '../content/zh';
+import { HTML_LANG, copyFor } from '../content';
 import Base from '../layouts/Base.astro';
+
+const LANG = 'zh';
+const { site } = copyFor(LANG);
 ---
 
-<Base lang="zh-CN" title={site.title} description={site.description}>
-  <SiteHeader />
+<Base lang={HTML_LANG[LANG]} title={site.title} description={site.description} alternate={{ lang: HTML_LANG.en, path: 'en/' }}>
+  <SiteHeader lang={LANG} />
   <main>
-    <Journey />
+    <Journey lang={LANG} />
   </main>
-  <Motto />
+  <Motto lang={LANG} />
 </Base>

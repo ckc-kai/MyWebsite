@@ -1,0 +1,21 @@
+---
+// The English page: the same journey, in American English. Its handwritten lines use Caveat, a Latin
+// hand (tokens.css switches --font-hand under :lang(en)); fonts.css declares it for both pages, and a
+// browser only fetches it where it is used.
+import Journey from '../../components/journey/Journey.astro';
+import Motto from '../../components/site/Motto.astro';
+import SiteHeader from '../../components/site/SiteHeader.astro';
+import { HTML_LANG, copyFor } from '../../content';
+import Base from '../../layouts/Base.astro';
+
+const LANG = 'en';
+const { site } = copyFor(LANG);
+---
+
+<Base lang={HTML_LANG[LANG]} title={site.title} description={site.description} alternate={{ lang: HTML_LANG.zh, path: '' }}>
+  <SiteHeader lang={LANG} />
+  <main>
+    <Journey lang={LANG} />
+  </main>
+  <Motto lang={LANG} />
+</Base>

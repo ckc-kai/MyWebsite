@@ -1,12 +1,20 @@
 ---
-import { JOURNEY_ZH as journey, SITE_ZH as site } from '../../content/zh';
+import { HTML_LANG, PAGE_PATH, copyFor, otherLang, type Lang } from '../../content';
 import ThemeToggle from '../ui/ThemeToggle.astro';
 
+interface Props {
+  lang: Lang;
+}
+
 const MARKER_COUNT = 4;
+const { lang } = Astro.props;
+const { journey, site } = copyFor(lang);
+const other = otherLang(lang);
+const otherHref = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${PAGE_PATH[other]}`;
 ---
 
 <header class="site-header" data-no-drag>
-  <a class="site-header__id" href="#top"><b>{site.name}</b><span lang="en">{site.nameLatin}</span></a>
+  <a class="site-header__id" href="#top"><b>{site.name}</b><span lang={site.nameAltLang}>{site.nameAlt}</span></a>
 
   <!-- The rail is the route in miniature: a stop per place, joined the way the map joins them. -->
   <nav class="site-header__rail" aria-label={site.railLabel}>
@@ -24,12 +32,24 @@ const MARKER_COUNT = 4;
 
   <div class="site-header__tools">
     <a aria-disabled="true">{site.navGlance}</a>
-    <a aria-disabled="true" lang="en" aria-label={site.navLanguage}>
+    <a href={otherHref} hreflang={HTML_LANG[other]} lang={site.navLanguageLang} aria-label={site.navLanguage} data-lang-switch>
       <span data-long>{site.navLanguage}</span><span data-short aria-hidden="true">{site.navLanguageShort}</span>
     </a>
     <ThemeToggle groupLabel={site.themeGroup} dayLabel={site.themeDay} nightLabel={site.themeNight} />
   </div>
 </header>
+
+<script>
+  // Switching language keeps your place: the link carries the stop being read.
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]')) {
+    link.addEventListener('click', () => {
+      const active = document.querySelector<HTMLElement>('.journey')?.dataset.active;
+      // Just after arriving on a stop the page may not have marked it yet; the address still says where we are.
+      const stop = active && active !== 'top' ? active : window.scrollY > 0 ? location.hash.slice(1) : '';
+      link.hash = stop;
+    });
+  }
+</script>
 
 <style>
   .site-header {
@@ -69,6 +89,11 @@ const MARKER_COUNT = 4;
     font-size: 0.9375rem;
     font-style: italic;
     color: var(--color-ink-soft);
+  }
+
+  /* On the English page the name beside it is Chinese, which has no italic of its own. */
+  .site-header__id span:lang(zh) {
+    font-style: normal;
   }
 
   .site-header__rail {
@@ -172,6 +197,19 @@ const MARKER_COUNT = 4;
 
   .site-header__tools a {
     color: var(--color-ink-soft);
+  }
+
+  /* The way to the other language is a real link: it lifts on hover, like the rest of the page's links. */
+  .site-header__tools a[data-lang-switch] {
+    text-decoration: none;
+    background: linear-gradient(var(--color-marker), var(--color-marker)) no-repeat 0 92% / 0 0.3em;
+    transition: background-size var(--duration-normal) var(--ease-out-expo), color var(--duration-fast) ease;
+  }
+
+  .site-header__tools a[data-lang-switch]:hover,
+  .site-header__tools a[data-lang-switch]:focus-visible {
+    color: var(--color-ink);
+    background-size: 100% 0.3em;
   }
 
   [data-short] {

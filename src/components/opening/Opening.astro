@@ -1,14 +1,20 @@
 ---
-import { OPENING_ZH as copy } from '../../content/zh';
+import { copyFor, type Lang } from '../../content';
 import RichText from '../ui/RichText.astro';
 import './opening.css';
+
+interface Props {
+  lang: Lang;
+}
+
+const copy = copyFor(Astro.props.lang).opening;
 ---
 
 <section class="opening" id="top" data-stop="top" aria-labelledby="opening-headline">
   <div class="opening__copy" data-no-drag>
     <h1 id="opening-headline" data-globe-clear>
-      {copy.headline.before}<mark>{copy.headline.decided}</mark><br /><span class="opening__then"
-        >{copy.headline.then}<mark class="opening__built">{copy.headline.built}</mark></span
+      {copy.headline.before}<mark>{copy.headline.decided}</mark>{copy.headline.afterDecided}<br /><span class="opening__then"
+        >{copy.headline.then}<mark class="opening__built">{copy.headline.built}</mark>{copy.headline.afterBuilt}</span
       >
     </h1>
     <p class="opening__deck" data-globe-clear>{copy.deck}</p>

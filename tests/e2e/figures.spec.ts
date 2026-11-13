@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('the flagship figures', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
   });
 
   test('all three are drawn straight onto the page and raise no errors', async ({ page }) => {
@@ -151,7 +151,7 @@ test.describe('the flagship figures', () => {
 
   test('nothing spills sideways on a phone', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });
@@ -169,7 +169,7 @@ for (const screen of SCREENS) {
     test.use({ viewport: screen });
 
     test('each machine stop shows its heading, drawing, stations and explanation without scrolling', async ({ page }) => {
-      await page.goto('/?theme=day');
+      await page.goto('./?theme=day');
       for (const stop of ['chengdu', 'semg', 'sdge']) {
         await page.locator(`#${stop}`).evaluate((section) => section.scrollIntoView({ behavior: 'instant', block: 'start' }));
         const fit = await page.locator(`#${stop}`).evaluate((section) => {
@@ -195,7 +195,7 @@ for (const screen of SCREENS) {
     });
 
     test('the opening, down to its legend and the way in, fits the first screen', async ({ page }) => {
-      await page.goto('/?theme=day');
+      await page.goto('./?theme=day');
       for (const selector of ['.opening__work', '.opening__actions', '.opening__legend']) {
         const box = await page.locator(selector).boundingBox();
         expect(box!.y + box!.height, selector).toBeLessThanOrEqual(screen.height);
@@ -206,7 +206,7 @@ for (const screen of SCREENS) {
 
 test.describe('captions under the drawings', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
   });
 
   test('the data source and the schedule sit straight under their drawings, small', async ({ page }) => {

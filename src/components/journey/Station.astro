@@ -1,5 +1,6 @@
 ---
-import type { StationCopy } from '../../content/zh';
+import { copyFor, type Lang } from '../../content';
+import type { StationCopy } from '../../content/types';
 import DeskFigure from '../anatomy/DeskFigure.astro';
 import ReportFigure from '../anatomy/ReportFigure.astro';
 import SemgFigure from '../anatomy/SemgFigure.astro';
@@ -15,6 +16,7 @@ interface Props {
   station: StationCopy;
   /** Position along the journey, used to give each stop its own highlighter. */
   index: number;
+  lang: Lang;
 }
 
 const MARKER_COUNT = 4;
@@ -22,7 +24,8 @@ const MARKER_COUNT = 4;
 /** A print is sized by its shape, so an upright one does not tower over the copy. */
 const PRINT_WIDTH = { landscape: '13.5rem', portrait: '9.5rem', square: '11rem' };
 
-const { station, index } = Astro.props;
+const { station, index, lang } = Astro.props;
+const { listJoiner } = copyFor(lang).site;
 // On wide screens these prints are pinned to the globe instead (see Journey.astro); here they are the narrow-screen copy.
 const photos = printsFor(station.photos).map((photo) => ({ ...photo, width: PRINT_WIDTH[photo.shape] }));
 const layout = station.machine ? 'machine' : station.paper ? 'paper' : 'story';
@@ -64,7 +67,7 @@ const photoGroup = photos.length > 2 ? 'row' : photos.length === 2 ? 'pair' : 's
         <p class="school__honors"><RichText text={station.school.honors} /></p>
         <p class="school__courses">
           <b>{station.school.coursesLabel}</b>
-          {station.school.courses.join('、')}
+          {station.school.courses.join(listJoiner)}
         </p>
       </div>
     )}
@@ -100,7 +103,7 @@ const photoGroup = photos.length > 2 ? 'row' : photos.length === 2 ? 'pair' : 's
   </div>
 
   {station.paper && <Paper paper={station.paper} />}
-  {station.machine === 'report' && <ReportFigure />}
-  {station.machine === 'semg' && <SemgFigure />}
-  {station.machine === 'desk' && <DeskFigure />}
+  {station.machine === 'report' && <ReportFigure lang={lang} />}
+  {station.machine === 'semg' && <SemgFigure lang={lang} />}
+  {station.machine === 'desk' && <DeskFigure lang={lang} />}
 </section>

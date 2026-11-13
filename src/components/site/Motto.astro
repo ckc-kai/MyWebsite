@@ -1,5 +1,11 @@
 ---
-import { SITE_ZH as site } from '../../content/zh';
+import { copyFor, type Lang } from '../../content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { site } = copyFor(Astro.props.lang);
 ---
 
 <p class="motto"><i lang="la">{site.motto}</i><span>{site.mottoGloss}</span></p>

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
@@ -10,12 +10,15 @@ interface Props {
   tilt?: number;
 }
 
-const DISPLAY_WIDTH_PX = 560;
+/** Prints are never drawn wider than 15rem (240 px): twice that keeps them sharp on a retina screen. */
+const DISPLAY_WIDTH_PX = 480;
 const { src, alt, caption, tilt = 0 } = Astro.props;
 ---
 
 <figure class="print" style={`--tilt: ${tilt}deg`}>
-  <Image src={src} alt={alt} width={DISPLAY_WIDTH_PX} loading="lazy" />
+  <!-- AVIF where the browser reads it, WebP otherwise. Low priority: prints wait in the wings until their
+       stop is read, so they must never hold up the first screen's fonts and script. -->
+  <Picture src={src} alt={alt} width={DISPLAY_WIDTH_PX} formats={['avif']} fallbackFormat="webp" loading="lazy" fetchpriority="low" />
   <figcaption>{caption}</figcaption>
 </figure>
 

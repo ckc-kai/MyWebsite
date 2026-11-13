@@ -1,12 +1,18 @@
 ---
-import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { copyFor, type Lang } from '../../content';
+import { compactSvg } from '../../lib/svg-path';
 import { spreadMarks } from '../../lib/spread';
 import { KEY_ROWS, MAX_TURN, SEMG_FIGURE_SIZE, STATION_SINCE, buildSemgFigure, hotSeat } from './semg-figure';
 import './figure.css';
 import './flagship.css';
 
+interface Props {
+  lang: Lang;
+}
+
 const PERCENT = 100;
-const copy = FLAGSHIP_ZH.semg;
+const flagship = copyFor(Astro.props.lang).flagship;
+const copy = flagship.semg;
 const figure = buildSemgFigure();
 const blocks = KEY_ROWS.join('').length;
 const versions = copy.versions.items.map((item) => {
@@ -38,9 +44,9 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
 
   <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
-    <svg class="iso-svg" viewBox={`0 0 ${SEMG_FIGURE_SIZE.width} ${SEMG_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
+    <svg class="iso-svg" viewBox={`0 0 ${SEMG_FIGURE_SIZE.width} ${SEMG_FIGURE_SIZE.height}`} aria-hidden="true" set:html={compactSvg(figure.svg)} />
   </div>
-  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__swipe">{flagship.swipe}</p>
   <p class="flag__figcaption">{copy.scope}</p>
   <div class="flag__cue">
     <p class="flag__hint">{copy.hint}</p>
@@ -67,7 +73,7 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
           <h4>{station.name}</h4>
           <p>{station.text}</p>
           <p class="flag__spec">
-            <span>{FLAGSHIP_ZH.specLabel}</span>
+            <span>{flagship.specLabel}</span>
             {station.spec}
           </p>
         </article>
@@ -132,7 +138,7 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
     const stops = parse<number[]>(figure.dataset.stops, []);
     const seatAt = parse<Record<string, number>>(figure.dataset.seats, {});
     const wrong = parse<string[]>(figure.dataset.wrong, []);
-    const turned = parse<string[]>(figure.dataset.turned, []);
+    const turned = parse<{ one: string; other: string }>(figure.dataset.turned, { one: '', other: '' });
     const home = Number(figure.dataset.home);
     const maxTurn = Number(figure.dataset.maxTurn);
 
@@ -175,7 +181,10 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
       }
       for (const clasp of clasps) clasp.toggleAttribute('hidden', Number(clasp.dataset.clasp) !== turn);
       const electrode = ((((home - 1 - turn) % ELECTRODES) + ELECTRODES) % ELECTRODES) + 1;
-      if (caption) caption.textContent = turn === 0 ? (figure.dataset.straight ?? '') : `${turned[0]} ${Math.abs(turn)} ${turned[1]} ${electrode} ${turned[2]}`;
+      if (caption) caption.textContent =
+          turn === 0
+            ? (figure.dataset.straight ?? '')
+            : (Math.abs(turn) === 1 ? turned.one : turned.other).replaceAll('{n}', String(Math.abs(turn))).replaceAll('{e}', String(electrode));
       figure.dataset.turn = String(turn);
       figure.dataset.overMuscle = String(electrode);
     };

@@ -1,11 +1,17 @@
 ---
-import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { copyFor, type Lang } from '../../content';
+import { compactSvg } from '../../lib/svg-path';
 import { DESK_FIGURE_SIZE, buildDeskFigure } from './desk-figure';
 import { DESK_PATHS, WORKERS } from './desk-paths';
 import './figure.css';
 import './flagship.css';
 
-const copy = FLAGSHIP_ZH.desk;
+interface Props {
+  lang: Lang;
+}
+
+const flagship = copyFor(Astro.props.lang).flagship;
+const copy = flagship.desk;
 const figure = buildDeskFigure();
 const stationOf = Object.fromEntries(copy.stations.map((station) => [station.id, station]));
 const firstQuestion = copy.follow.questions[0].id;
@@ -25,9 +31,9 @@ const FIRST_STATION = 'pdf';
 
   <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
-    <svg class="iso-svg" viewBox={`0 0 ${DESK_FIGURE_SIZE.width} ${DESK_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
+    <svg class="iso-svg" viewBox={`0 0 ${DESK_FIGURE_SIZE.width} ${DESK_FIGURE_SIZE.height}`} aria-hidden="true" set:html={compactSvg(figure.svg)} />
   </div>
-  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__swipe">{flagship.swipe}</p>
   <p class="flag__hint">{copy.hint}</p>
 
   <div class="flag__who" role="group" aria-label={copy.who.label}>
@@ -78,7 +84,7 @@ const FIRST_STATION = 'pdf';
           <p>{station.text}</p>
           {station.spec && (
             <p class="flag__spec">
-              <span>{FLAGSHIP_ZH.specLabel}</span>
+              <span>{flagship.specLabel}</span>
               {station.spec}
             </p>
           )}

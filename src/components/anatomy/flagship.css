@@ -722,3 +722,23 @@
     font-size: 0.875rem;
   }
 }
+
+/* English runs longer than Chinese for the same explanation: on a short screen its column is set a half
+   size smaller, so the explanation still fits beside the drawing. */
+@media (min-width: 1001px) and (max-height: 820px) {
+  .flag__side:lang(en) {
+    font-size: 0.9375rem;
+  }
+
+  .flag__side:lang(en) .flag__info article > p {
+    line-height: 1.55;
+  }
+
+  .flag__side:lang(en) .flag__try {
+    margin-top: 6px;
+  }
+
+  .flag__side:lang(en) .flag__version {
+    min-height: 4.5em;
+  }
+}

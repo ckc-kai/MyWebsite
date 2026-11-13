@@ -30,7 +30,7 @@ async function departForHangzhou(page: Page): Promise<number> {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/?theme=day');
+  await page.goto('./?theme=day');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 });
 
@@ -110,7 +110,7 @@ test.describe('the globe', () => {
   test('reduced motion turns auto rotation off and docks without a flight', async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: 'reduce' });
     const page = await context.newPage();
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
     const before = await labelX(page, 'HZ');
     await page.waitForTimeout(1500);
     expect(await labelX(page, 'HZ')).toBeCloseTo(before, 0);
@@ -189,7 +189,7 @@ test.describe('the journey', () => {
 
   test('on a phone the globe is a band under the header and the rail follows along', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
     const stage = page.locator('.journey__stage');
     await expect(stage).toHaveCSS('position', 'sticky');
 
@@ -287,7 +287,7 @@ test.describe('day and night', () => {
       const context = await browser.newContext();
       const page = await context.newPage();
       await page.clock.setFixedTime(new Date(2026, 10, 12, hour, 0, 0));
-      await page.goto('/');
+      await page.goto('./');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await context.close();
     }
@@ -297,7 +297,7 @@ test.describe('day and night', () => {
 for (const width of [320, 375, 768, 1024, 1440, 1920]) {
   test(`no horizontal overflow and a two-line headline at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
@@ -347,7 +347,7 @@ test.describe('the stops', () => {
 
   test('on a phone the photographs stay in the copy, since the globe is only a band', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
     await expect(page.locator('#el-paso .station__photos img')).toHaveCount(2);
     await expect(page.locator('#el-paso .station__photos')).toBeVisible();
     await expect(page.locator('[data-prints-for="el-paso"]')).toBeHidden();
@@ -370,7 +370,7 @@ test.describe('the stops', () => {
 
   test('at night the highlighter is the same broad stroke as by day, not a thin underline', async ({ page }) => {
     const stroke = async (theme: string): Promise<string> => {
-      await page.goto(`/?theme=${theme}`);
+      await page.goto(`./?theme=${theme}`);
       return page.locator('.opening mark').first().evaluate((mark) => getComputedStyle(mark).backgroundImage);
     };
     const day = await stroke('day');
@@ -381,7 +381,7 @@ test.describe('the stops', () => {
   });
 
   test('at night a paper is a dark sheet, not a lit page', async ({ page }) => {
-    await page.goto('/?theme=night');
+    await page.goto('./?theme=night');
     const [red, green, blue] = await page.locator('#miller .paper').evaluate((sheet) => {
       const match = /rgb\((\d+), (\d+), (\d+)/.exec(getComputedStyle(sheet).backgroundColor);
       return match ? match.slice(1).map(Number) : [255, 255, 255];
@@ -441,7 +441,7 @@ test.describe('the stops', () => {
 
 test.describe('round 8 copy and photos', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?theme=day');
+    await page.goto('./?theme=day');
   });
 
   test('Hangzhou opens with 最忆是杭州', async ({ page }) => {
@@ -459,7 +459,7 @@ test.describe('round 8 copy and photos', () => {
   });
 
   test('at night the sketches are drawn in light ink', async ({ page }) => {
-    await page.goto('/?theme=night');
+    await page.goto('./?theme=night');
     const ink = await page.locator('#hangzhou .west-lake').evaluate((list) => getComputedStyle(list).color);
     const [red, green, blue] = (ink.match(/\d+/g) ?? []).map(Number);
     expect(Math.min(red, green, blue)).toBeGreaterThan(180);
@@ -492,7 +492,7 @@ test.describe('round 8 copy and photos', () => {
 test.describe('selecting text', () => {
   for (const theme of ['day', 'night'] as const) {
     test(`marks the selection with highlighter strokes instead of a flat box (${theme})`, async ({ page }) => {
-      await page.goto(`/?theme=${theme}`);
+      await page.goto(`./?theme=${theme}`);
       await expect(page.locator('html')).toHaveAttribute('data-ink-select', '');
       await page.locator('.opening__deck').evaluate((deck) => {
         const range = document.createRange();

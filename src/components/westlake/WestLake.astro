@@ -5,6 +5,7 @@
  * for screen readers.
  */
 import { drawWestLake, type WestLakeKey } from './scenes';
+import { compactSvg } from '../../lib/svg-path';
 import './west-lake.css';
 
 interface Props {
@@ -19,7 +20,7 @@ const { sketches, label } = Astro.props;
   {sketches.map((sketch) => (
     <li>
       <figure>
-        <Fragment set:html={drawWestLake(sketch.key)} />
+        <Fragment set:html={compactSvg(drawWestLake(sketch.key))} />
         <figcaption>
           <b>{sketch.name}</b>
           <span class="west-lake__note">{sketch.note}</span>

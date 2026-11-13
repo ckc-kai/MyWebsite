@@ -26,7 +26,16 @@ export interface PrintItem extends StationPhoto {
   readonly shape: PrintShape;
 }
 
-function shapeOf({ width, height }: ImageMetadata): PrintShape {
+/**
+ * Reading `width` straight off an image import makes Astro ship the full-size original next to the
+ * resized prints (about 3 MB that no page ever asks for). Its `clone` is a plain copy that doesn't.
+ */
+function sizeOf(image: ImageMetadata): Pick<ImageMetadata, 'width' | 'height'> {
+  return (image as ImageMetadata & { clone?: ImageMetadata }).clone ?? image;
+}
+
+function shapeOf(image: ImageMetadata): PrintShape {
+  const { width, height } = sizeOf(image);
   const ratio = width / height;
   if (Math.abs(ratio - 1) <= SQUARE_TOLERANCE) return 'square';
   return ratio > 1 ? 'landscape' : 'portrait';

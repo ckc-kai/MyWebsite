@@ -1,17 +1,31 @@
-import type { WestLakeKey } from '../components/westlake/scenes';
-import type { LegKind } from '../lib/journey';
+import type { JourneyCopy, OpeningCopy, SiteCopy, StationCopy, WorkItem } from './types';
+
+export type {
+  ContactKind,
+  HobbyKey,
+  JourneyCopy,
+  MachineKey,
+  OpeningCopy,
+  PaperSheet,
+  Passage,
+  PhotoKey,
+  Rich,
+  SchoolRecord,
+  SiteCopy,
+  StationCopy,
+  StationPhoto,
+  WorkItem,
+} from './types';
 
 /**
  * Chinese copy. Written for a recruiter first: what was done and what was hard,
  * in plain words. Every figure traces back to the résumé.
  */
 
-/** A run of text; `{ b }` marks the few words a skimming reader should catch. */
-export type Rich = ReadonlyArray<string | { readonly b: string }>;
-
-export const SITE_ZH = {
+export const SITE_ZH: SiteCopy = {
   name: '褚开诚',
-  nameLatin: 'Kaicheng Chu',
+  nameAlt: 'Kaicheng Chu',
+  nameAltLang: 'en',
   title: '褚开诚 Kaicheng Chu',
   description: '褚开诚：UCLA 数据科学工程硕士，2026 年 12 月毕业，在找 AI 相关的工作。一份可以走一遍的简历。',
   motto: 'Sapere aude',
@@ -19,24 +33,16 @@ export const SITE_ZH = {
   navGlance: '速览',
   navLanguage: 'English',
   navLanguageShort: 'EN',
+  navLanguageLang: 'en',
   railLabel: '站点',
   themeGroup: '昼夜',
   themeDay: '白天',
   themeNight: '夜航',
   globeLabel: '一颗缓慢自转的地球，画着从杭州出发的路线。聚焦后可用左右方向键转动。',
-} as const;
+  listJoiner: '、',
+};
 
-export interface WorkItem {
-  readonly year: string;
-  readonly who: string;
-  readonly kind: LegKind;
-  readonly href: string;
-  readonly what: string;
-  readonly how: Rich;
-}
-
-export const OPENING_ZH = {
-  // Two highlights, two colours: yellow for deciding what right means, orange for building it.
+export const OPENING_ZH: OpeningCopy = {
   headline: { before: '先定义什么叫', decided: '做对了', then: '再把它', built: '做出来' },
   // No spaces around Latin and digits here: this line is set in a handwriting face,
   // where typed gaps read as hesitations.
@@ -88,77 +94,9 @@ export const OPENING_ZH = {
   // The station label beside him already says where; this says what the place is to the story.
   kidNote: '从这里开始',
   kidAlt: '小时候的我，站在杭州',
-} as const;
+};
 
-export type PhotoKey = 'tennis' | 'elpaso' | 'uva' | 'grad1' | 'grad2' | 'ucla' | 'now' | 'sea' | 'camera' | 'hike';
-export type MachineKey = 'report' | 'semg' | 'desk';
-export type HobbyKey = 'tennis' | 'gym' | 'reading' | 'photo';
-export type ContactKind = 'mail' | 'linkedin' | 'instagram';
-
-export interface StationPhoto {
-  readonly key: PhotoKey;
-  readonly alt: string;
-  readonly caption: string;
-}
-
-/** A paragraph to read. A project brings its own name as a small title. */
-export interface Passage {
-  readonly title?: string;
-  readonly text: Rich;
-}
-
-/** A school, set like an entry on a transcript. */
-export interface SchoolRecord {
-  readonly degrees: readonly string[];
-  readonly honors: Rich;
-  readonly coursesLabel: string;
-  readonly courses: readonly string[];
-}
-
-/** A piece of research, set like the first page of a paper. */
-export interface PaperSheet {
-  readonly venue: string;
-  readonly title: string;
-  readonly subtitle?: string;
-  readonly byline: string;
-  readonly sections: ReadonlyArray<{ readonly head: string; readonly text: Rich }>;
-  /** Odds ratios with their 95% intervals, drawn as a small forest plot. */
-  readonly estimates?: ReadonlyArray<{ readonly label: string; readonly ratio: number; readonly low: number; readonly high: number }>;
-  readonly estimatesCaption?: string;
-}
-
-export interface StationCopy {
-  /** Matches a stop id in `lib/journey`. */
-  readonly id: string;
-  /** Short name for the rail at the top. */
-  readonly rail: string;
-  readonly kind: LegKind;
-  readonly when: string;
-  /** The job title or kind of work, where there is one. */
-  readonly role?: string;
-  readonly place: string;
-  /** No punctuation in titles; a space stands in for the pause. */
-  readonly title: string;
-  readonly lead: Rich;
-  /** On a wide screen the lead and each passage keep to one line apiece instead of wrapping. */
-  readonly singleLines?: boolean;
-  /** Ink sketches of the place, drawn at build time; the note is read out, not shown. */
-  readonly sketches?: ReadonlyArray<{ readonly key: WestLakeKey; readonly name: string; readonly note: string }>;
-  readonly sketchesLabel?: string;
-  readonly school?: SchoolRecord;
-  readonly passages?: readonly Passage[];
-  readonly paper?: PaperSheet;
-  readonly photos?: readonly StationPhoto[];
-  readonly machine?: MachineKey;
-  /** The one before-and-after worth stating next to a machine. */
-  readonly result?: { readonly label: string; readonly from: string; readonly to: string };
-  readonly contactTitle?: string;
-  readonly contacts?: ReadonlyArray<{ readonly kind: ContactKind; readonly label: string; readonly value: string; readonly href?: string }>;
-  readonly hobbiesTitle?: string;
-  readonly hobbies?: ReadonlyArray<{ readonly key: HobbyKey; readonly label: string }>;
-}
-
-export const JOURNEY_ZH = {
+export const JOURNEY_ZH: JourneyCopy = {
   stations: [
     {
       id: 'hangzhou',
@@ -381,4 +319,4 @@ export const JOURNEY_ZH = {
       ],
     },
   ] satisfies readonly StationCopy[],
-} as const;
+};

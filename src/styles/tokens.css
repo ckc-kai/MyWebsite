@@ -127,3 +127,8 @@
     --header-height: 88px;
   }
 }
+
+/* The English page writes its handwritten lines in a Latin hand; Long Cang stays behind it for any Chinese. */
+:root:lang(en) {
+  --font-hand: 'Caveat', 'Long Cang', cursive;
+}

@@ -276,13 +276,6 @@
   text-underline-offset: 5px;
 }
 
-.figure__note {
-  grid-column: 1 / -1;
-  font-size: var(--text-small);
-  line-height: 1.55;
-  color: var(--color-ink-faint);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .fig-sheet,
   .fig-glow.is-active {

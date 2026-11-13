@@ -1,10 +1,16 @@
 ---
-import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { copyFor, type Lang } from '../../content';
+import { compactSvg } from '../../lib/svg-path';
 import { FIGURE_SIZE, buildPipelineFigure } from './pipeline-figure';
 import './figure.css';
 import './flagship.css';
 
-const copy = FLAGSHIP_ZH.report;
+interface Props {
+  lang: Lang;
+}
+
+const flagship = copyFor(Astro.props.lang).flagship;
+const copy = flagship.report;
 const figure = buildPipelineFigure();
 /** The bench leaves empty room above the chart board and below its front edge; both are trimmed (the bottom keeps its shadow). */
 const HEADROOM = 64;
@@ -26,9 +32,9 @@ const VIEW_HEIGHT = FIGURE_SIZE.height - HEADROOM - FOOTROOM;
 
   <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
-    <svg class="iso-svg" viewBox={`0 ${HEADROOM} ${FIGURE_SIZE.width} ${VIEW_HEIGHT}`} aria-hidden="true" set:html={figure.svg} />
+    <svg class="iso-svg" viewBox={`0 ${HEADROOM} ${FIGURE_SIZE.width} ${VIEW_HEIGHT}`} aria-hidden="true" set:html={compactSvg(figure.svg)} />
   </div>
-  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__swipe">{flagship.swipe}</p>
   <p class="flag__figcaption">
     {copy.schedule}
     <span class="flag__spec flag__spec--inline">{copy.scheduleSpec}</span>
@@ -58,7 +64,7 @@ const VIEW_HEIGHT = FIGURE_SIZE.height - HEADROOM - FOOTROOM;
           <h4>{stage.name}</h4>
           <p>{stage.text}</p>
           <p class="flag__spec">
-            <span>{FLAGSHIP_ZH.specLabel}</span>
+            <span>{flagship.specLabel}</span>
             {stage.spec}
           </p>
         </article>

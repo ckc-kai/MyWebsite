@@ -337,3 +337,15 @@
     margin-top: 30px;
   }
 }
+
+/* The Latin hand is narrower than the Chinese one: the same line can run a little wider and still clear
+   the photo on Hangzhou, and it takes a line fewer. */
+:lang(en) .opening__deck {
+  max-width: 19em;
+}
+
+@media (min-width: 821px) and (max-height: 700px) {
+  :lang(en) .opening__how {
+    line-height: 1.45;
+  }
+}

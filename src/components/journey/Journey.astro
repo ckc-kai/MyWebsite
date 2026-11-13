@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import childCutout from '../../assets/child-cutout.png';
-import { JOURNEY_ZH as journey, OPENING_ZH as opening, SITE_ZH as site } from '../../content/zh';
+import { copyFor, type Lang } from '../../content';
 import { findStop } from '../../lib/journey';
 import Print from '../ui/Print.astro';
 import Globe from '../globe/Globe.astro';
@@ -9,6 +9,13 @@ import Opening from '../opening/Opening.astro';
 import Station from './Station.astro';
 import { printsFor } from './photos';
 import './journey.css';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { journey, opening, site } = copyFor(lang);
 
 // Each stop's photographs, laid on the globe beside the place they were taken.
 const boards = journey.stations
@@ -18,7 +25,7 @@ const boards = journey.stations
 
 <div class="journey" data-globe-stage data-active="top">
   <div class="journey__stage">
-    <Globe lang="zh" label={site.globeLabel} />
+    <Globe lang={lang} label={site.globeLabel} />
     <div class="journey__anchor" data-globe-anchor aria-hidden="true"></div>
 
     <!-- Pinned to Hangzhou on the globe: he stands where the story starts, and turns with it. -->
@@ -47,8 +54,8 @@ const boards = journey.stations
     ))}
   </div>
 
-  <Opening />
-  {journey.stations.map((station, index) => <Station station={station} index={index} />)}
+  <Opening lang={lang} />
+  {journey.stations.map((station, index) => <Station station={station} index={index} lang={lang} />)}
 </div>
 
 <script>

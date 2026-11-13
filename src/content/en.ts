@@ -1,0 +1,300 @@
+import type { JourneyCopy, OpeningCopy, SiteCopy, StationCopy, WorkItem } from './types';
+
+/**
+ * English copy, in plain American English. Written for a recruiter or hiring manager first: what was
+ * done and what was hard, said the way a person would say it. Every figure matches the Chinese page
+ * and traces back to the résumé.
+ */
+
+export const SITE_EN: SiteCopy = {
+  name: 'Kaicheng Chu',
+  nameAlt: '褚开诚',
+  nameAltLang: 'zh-CN',
+  title: 'Kaicheng Chu 褚开诚',
+  description:
+    'Kaicheng Chu: Master of Engineering in Data Science at UCLA, graduating December 2026, looking for work in AI. A résumé you can walk through.',
+  motto: 'Sapere aude',
+  mottoGloss: 'Think it through, then go all the way',
+  navGlance: 'Quick look',
+  navLanguage: '中文',
+  navLanguageShort: '中',
+  navLanguageLang: 'zh-CN',
+  railLabel: 'Stops',
+  themeGroup: 'Day or night',
+  themeDay: 'Day',
+  themeNight: 'Red-eye',
+  globeLabel: 'A slowly turning globe tracing the route from Hangzhou. When it has focus, turn it with the left and right arrow keys.',
+  listJoiner: ', ',
+};
+
+export const OPENING_EN: OpeningCopy = {
+  headline: { before: 'Define what ', decided: 'right', afterDecided: ' looks like', then: 'then ', built: 'build it' },
+  deck: 'Master of Engineering in Data Science at UCLA, graduating December 2026 and looking for work in AI. The globe maps the road that got me here.',
+  workTitle: 'Recent work',
+  work: [
+    {
+      year: '2026',
+      who: 'SDG&E',
+      kind: 'work',
+      href: '#sdge',
+      what: 'Regulatory Q&A you can trace',
+      how: ['Thick filings and a dozen-plus data tables. I built a Q&A system that can ', { b: 'search documents, look up numbers, and do the math' }, ', and ', { b: 'cites a source for every sentence' }, '.'],
+    },
+    {
+      year: '2026',
+      who: 'UCLA',
+      kind: 'study',
+      href: '#semg',
+      what: 'Typing with muscle signals',
+      how: ['No keyboard, just signals from the wrist muscles. With very little data, the model has to ', { b: 'learn to read the signal' }, ', not memorize one person.'],
+    },
+    {
+      year: '2025',
+      who: 'Jifeng Elf',
+      kind: 'work',
+      href: '#chengdu',
+      what: 'Summaries you can check',
+      how: ['Reports came in every format; even the contents page was hard to parse. I ', { b: 'rebuilt contents extraction and retrieval' }, ' and set ', { b: 'a checkable standard' }, ' for summaries.'],
+    },
+  ] satisfies readonly WorkItem[],
+  depart: 'Start in Hangzhou',
+  glance: '30-second version',
+  legendStudy: 'School',
+  legendWork: 'Internships & projects',
+  legendHint: 'Drag the globe to turn it',
+  kidNote: 'It all started here',
+  kidAlt: 'Me as a kid, standing in Hangzhou',
+};
+
+export const JOURNEY_EN: JourneyCopy = {
+  stations: [
+    {
+      id: 'hangzhou',
+      rail: 'Hangzhou',
+      kind: 'study',
+      when: 'The start',
+      place: 'Hangzhou, Zhejiang',
+      title: 'Growing up in Hangzhou',
+      lead: [{ b: 'Still the place I miss most' }],
+      sketchesLabel: 'Five views of West Lake, in ink',
+      sketches: [
+        { key: 'duanqiao', name: 'Broken Bridge after snow', note: 'After a snowfall, the top of the bridge thaws first, so from a distance it looks broken.' },
+        { key: 'santan', name: 'Three Pools Mirroring the Moon', note: 'Three small stone pagodas stand in the lake; on a full-moon night, their round windows glow and reflect in the water.' },
+        { key: 'leifeng', name: 'Leifeng Pagoda at sunset', note: 'The sun setting behind Leifeng Pagoda.' },
+        { key: 'sudi', name: 'Su Causeway at spring dawn', note: 'The long causeway early on a spring morning, lined with willows and peach blossoms.' },
+        { key: 'quyuan', name: 'Lotus in the breeze', note: 'Lotus leaves and flowers in summer at Quyuan Garden.' },
+      ],
+    },
+    {
+      id: 'el-paso',
+      rail: 'El Paso',
+      kind: 'study',
+      when: '2018–2019',
+      place: 'Chapin High School, El Paso, Texas',
+      title: 'My exchange year',
+      lead: ['Through Zhejiang Province’s AYA (Academic Year in America) program, I spent a year of high school in El Paso, right on the U.S.–Mexico border.'],
+      passages: [
+        {
+          text: [
+            'In class, I competed in the University Interscholastic League math invitational, placing ',
+            { b: '4th in the semifinals and 6th in the finals' },
+            ' in the 10th-grade division. Outside class, I made the school tennis team and won the ',
+            { b: 'spring JV district doubles title' },
+            '.',
+          ],
+        },
+        { text: ['On weekends, I helped the community relations director of the Texas Health and Human Services Commission hand out supplies to people experiencing homelessness.'] },
+      ],
+      photos: [
+        { key: 'tennis', alt: 'The Chapin High School tennis team on the court', caption: 'Tennis team' },
+        { key: 'elpaso', alt: 'With two friends at a birthday party, each holding a book', caption: 'In El Paso' },
+      ],
+    },
+    {
+      id: 'miller',
+      rail: 'Miller',
+      kind: 'study',
+      when: '2019–2021',
+      place: 'Miller School of Albemarle, Virginia',
+      title: 'Answering a question with data',
+      lead: ['My last two years of high school. I asked my own question, then ', { b: 'found the data to answer it' }, '.'],
+      passages: [
+        { text: ['Graduated as ', { b: 'valedictorian' }, '.'] },
+        { text: ['Outside class, I led the Animal Adventure club: talks on endangered species, tree planting, fishing, and hiking.'] },
+      ],
+      paper: {
+        venue: 'European Journal of Biomedical and Life Sciences',
+        title: 'Negative effect of breakfast skipping',
+        subtitle: 'Findings among adolescents of the United States',
+        byline: 'Kaicheng Chu, Miller School of Albemarle, independent research',
+        sections: [
+          { head: 'Question', text: ['Does skipping breakfast hurt teenagers’ weight and grades?'] },
+          { head: 'Data', text: ['The CDC’s 2017 Youth Risk Behavior Survey (YRBSS), with a final sample of 9,361 high school students.'] },
+          { head: 'Method', text: ['Two logistic regression models, controlling for age, sex, race and ethnicity, and other eating habits.'] },
+          {
+            head: 'Findings',
+            text: ['About 14% of high schoolers skip breakfast. Skipping it was significantly associated with ', { b: 'being overweight or obese' }, ' and with ', { b: 'grades below an A' }, '.'],
+          },
+        ],
+        estimates: [
+          { label: 'Overweight or obese', ratio: 1.3523, low: 1.1919, high: 1.533 },
+          { label: 'Grades below an A', ratio: 1.444, low: 1.263, high: 1.652 },
+        ],
+        estimatesCaption: 'Odds ratios for skipping breakfast, with 95% confidence intervals. The dashed line at 1 means no difference.',
+      },
+    },
+    {
+      id: 'uva',
+      rail: 'UVA',
+      kind: 'study',
+      when: '2021–2025',
+      place: 'University of Virginia, Charlottesville',
+      title: 'Two degrees in four years',
+      lead: ['Computer science and statistics, side by side for four years.'],
+      school: {
+        degrees: ['B.S. in Computer Science', 'B.A. in Statistics'],
+        honors: ['Made the ', { b: 'Dean’s List' }, ' eight semesters in a row and graduated with ', { b: 'Highest Distinction' }, '.'],
+        coursesLabel: 'Coursework',
+        courses: ['Computer Vision', 'Artificial Intelligence', 'Databases', 'Machine Learning', 'Data Analysis'],
+      },
+      passages: [
+        {
+          title: 'E-Commerce Customer Analytics',
+          text: [
+            'Over a million customer records, with reviews, purchases, and marketing emails all mixed together. I sorted reviews into praise and complaints, predicted who would buy, and used a 480,000-person email experiment to work out ',
+            { b: 'how often to send' },
+            '.',
+          ],
+        },
+        {
+          title: 'Real-time Emotion Recognition',
+          text: ['A webcam app that ', { b: 'reads emotions in real time' }, ': it finds the face, then a fine-tuned image model picks one of six emotions.'],
+        },
+        {
+          title: 'Charlottesville Travel Planner',
+          text: ['A travel site: tell it how much time you have and what you like, and it ', { b: 'plans your itinerary' }, '. We tested it with real users before launch.'],
+        },
+      ],
+      paper: {
+        venue: 'Co-authored with Associate Professor Panagiotis Apostolellis during my research assistantship',
+        title: 'Project-Based Learning: Chimera or Hestia for Design Engineering Pedagogy during Unprecedented Times?',
+        byline: 'Panagiotis Apostolellis, Kaicheng Chu, Department of Computer Science, University of Virginia',
+        sections: [
+          { head: 'Question', text: ['The pandemic switched the course between teaching modes several times. Did project-based learning hold up, and what best predicts student grades?'] },
+          { head: 'Data', text: ['Surveys and grades from 571 undergraduates in a project-based design engineering course, across eight semesters (Fall 2019 to Spring 2023).'] },
+          { head: 'Method', text: ['ANOVA to compare teaching modes, and linear mixed-effects models to separate individual-level factors from team-level ones.'] },
+          {
+            head: 'Findings',
+            text: [
+              'The return to in-person classes hit motivation and project grades hardest, while final course grades didn’t depend on teaching mode. ',
+              { b: 'Team efficacy and team conflict' },
+              ' were the strongest predictors of grades, especially for lower-performing teams.',
+            ],
+          },
+        ],
+      },
+      photos: [
+        { key: 'uva', alt: 'In a graduation gown in front of the Rotunda at the University of Virginia', caption: 'Graduation day' },
+        { key: 'grad1', alt: 'With a friend, both wearing graduation stoles, under a tree by a brick building', caption: 'Graduating together' },
+        { key: 'grad2', alt: 'With a classmate in front of Class of 2025 balloons', caption: 'Class of 2025' },
+      ],
+    },
+    {
+      id: 'shaoxing',
+      rail: 'Shaoxing',
+      kind: 'work',
+      when: 'Summer 2024',
+      role: 'Full-stack developer intern',
+      place: 'Pukang Biotech, Shaoxing, Zhejiang',
+      title: 'My first project from requirements to delivery',
+      lead: [
+        'Picked for a student career program, my team and I built the company’s logging system from scratch. It was my first time taking a project through all five stages: ',
+        { b: 'requirements, design, development, internal testing, and the final presentation' },
+        '.',
+      ],
+    },
+    {
+      id: 'chengdu',
+      rail: 'Chengdu',
+      kind: 'work',
+      when: 'Summer 2025',
+      role: 'AI Data Engineer Intern',
+      place: 'Jifeng Elf AI, Chengdu, Sichuan',
+      title: 'How to tell a summary got it right',
+      lead: ['Every day, equity researchers get hundreds of research reports and filings. The pipeline reads them all and writes a long and a short summary of each.'],
+      machine: 'report',
+      result: { label: 'Composite summary score', from: '54%', to: '72%' },
+    },
+    {
+      id: 'ucla',
+      rail: 'UCLA',
+      kind: 'study',
+      when: '2025–2026',
+      place: 'UCLA, Los Angeles, California',
+      title: 'Data science at UCLA',
+      lead: ['I moved from the East Coast to the West Coast for a Master of Engineering that runs a little over a year.'],
+      school: {
+        degrees: ['Master of Engineering, Data Science'],
+        honors: ['Received a ', { b: 'Department Financial Award' }, '. Graduating in December 2026.'],
+        coursesLabel: 'Coursework',
+        courses: ['Deep Learning', 'Large-Scale Machine Learning', 'Big Data Analytics', 'Natural Language Processing'],
+      },
+      photos: [{ key: 'ucla', alt: 'Standing by the UCLA engineering school sign', caption: 'Engineering school' }],
+    },
+    {
+      id: 'semg',
+      rail: 'sEMG',
+      kind: 'study',
+      when: 'Early 2026',
+      role: 'Deep learning research project',
+      place: 'UCLA, Los Angeles',
+      title: 'Typing with muscle signals instead of a keyboard',
+      lead: ['Two bands on the wrists pick up the muscles’ electrical signals and work out which key was pressed.'],
+      machine: 'semg',
+      result: { label: 'Wrong characters per 100', from: '76', to: '10' },
+    },
+    {
+      id: 'sdge',
+      rail: 'SDG&E',
+      kind: 'work',
+      when: 'Summer 2026',
+      role: 'AI Engineer',
+      place: 'UCLA capstone sponsored by SDG&E, California',
+      title: 'Traceable answers from regulatory filings',
+      lead: [
+        'SDG&E is San Diego’s gas and electric utility. Half of its regulatory information lives in very long PDFs and half in more than a dozen data tables, and a single question often needs both, plus some math.',
+      ],
+      machine: 'desk',
+      result: { label: 'Number lookups right on the first hit', from: '11.7%', to: '75.0%' },
+    },
+    {
+      id: 'next',
+      rail: 'To be continued',
+      kind: 'study',
+      when: 'December 2026',
+      place: 'Graduation',
+      title: 'To be continued',
+      lead: ['Looking for work in AI. I’m at my best in the part in the middle: ', { b: 'getting clear with people on what “right” means, then building it' }, '.'],
+      contactTitle: 'Get in touch',
+      contacts: [
+        { kind: 'mail', label: 'Gmail', value: 'chukaicheng1@gmail.com', href: 'mailto:chukaicheng1@gmail.com' },
+        { kind: 'mail', label: '163 Mail', value: 'chu_kaicheng915@163.com', href: 'mailto:chu_kaicheng915@163.com' },
+        { kind: 'linkedin', label: 'LinkedIn', value: 'kaicheng-chu', href: 'https://www.linkedin.com/in/kaicheng-chu-a96b6821b' },
+        { kind: 'instagram', label: 'Instagram', value: 'ckaic_kkkkk', href: 'https://www.instagram.com/ckaic_kkkkk/' },
+      ],
+      hobbiesTitle: 'When I’m not coding',
+      hobbies: [
+        { key: 'tennis', label: 'Tennis' },
+        { key: 'gym', label: 'Lifting' },
+        { key: 'reading', label: 'Reading' },
+        { key: 'photo', label: 'Photography' },
+      ],
+      photos: [
+        { key: 'now', alt: 'Me now, in front of a fountain at UCLA', caption: 'Now' },
+        { key: 'camera', alt: 'Taking a photo', caption: 'Behind the camera' },
+        { key: 'sea', alt: 'Sitting by the ocean at dusk', caption: 'By the ocean' },
+        { key: 'hike', alt: 'Resting on a rock in the woods during a hike', caption: 'On the trail' },
+      ],
+    },
+  ] satisfies readonly StationCopy[],
+};

@@ -7,14 +7,15 @@ export default defineConfig({
   fullyParallel: true,
   reporter: [['list']],
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    // The site lives under /MyWebsite/ (astro.config.mjs); tests navigate relative to it.
+    baseURL: `http://localhost:${PORT}/MyWebsite/`,
     // The machine's own Chrome: no separate browser download needed.
     channel: 'chrome',
     viewport: { width: 1440, height: 900 },
   },
   webServer: {
     command: 'npm run dev',
-    port: PORT,
+    url: `http://localhost:${PORT}/MyWebsite/`,
     reuseExistingServer: true,
   },
 });
