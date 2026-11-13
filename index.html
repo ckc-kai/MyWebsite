@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kaicheng (Kai) Chu — Data Science &amp; ML Engineer. CS + Statistics from UVA, MS Data Science at UCLA. Building AI agents, data pipelines, and intelligent systems.">
+    <meta name="author" content="Kaicheng Chu">
+    <meta property="og:title" content="Kaicheng (Kai) Chu | Portfolio">
+    <meta property="og:description" content="Data Science &amp; ML Engineer. CS + Statistics from UVA, MS Data Science at UCLA. Building AI agents, data pipelines, and intelligent systems.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Kaicheng (Kai) Chu | Portfolio">
+    <meta name="twitter:description" content="Data Science &amp; ML Engineer. CS + Statistics from UVA, MS Data Science at UCLA.">
     <title>Kaicheng (Kai) Chu Portfolio</title>
+    <link rel="icon" href="pictures/monogram.png" type="image/png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +26,7 @@
             <div id="boot-text"></div>
             <div class="boot-cursor">_</div>
         </div>
+        <div class="boot-skip-hint">[ CLICK ANYWHERE OR PRESS ANY KEY TO SKIP ]</div>
     </div>
 
     <!-- Custom Cursor -->
@@ -28,19 +38,25 @@
 
     <!-- Navigation Bar -->
     <nav class="nav-bar">
-        <div class="nav-logo">{SYSTEM_LOG}</div>
+        <div class="nav-logo">
+            <img src="pictures/monogram.png" alt="KC" class="nav-monogram">
+            <span>{SYSTEM_LOG}</span>
+        </div>
         <ul class="nav-menu">
-            <li><a href="#entry" class="nav-link">01 // OVERVIEW</a></li>
-            <li><a href="#professional" class="nav-link">02 // EXPERIENCE</a></li>
-            <li><a href="#projects" class="nav-link">03 // PROJECTS</a></li>
-            <li><a href="#biography" class="nav-link">04 // ME</a></li>
-            <li><a href="#timeline" class="nav-link">05 // TIMELINE</a></li>
-            <li><a href="#gallery" class="nav-link">06 // VISUAL</a></li>
+            <li><a href="#entry" class="nav-link" data-i18n="nav-overview">01 // OVERVIEW</a></li>
+            <li><a href="#professional" class="nav-link" data-i18n="nav-experience">02 // EXPERIENCE</a></li>
+            <li><a href="#projects" class="nav-link" data-i18n="nav-projects">03 // PROJECTS</a></li>
+            <li><a href="#biography" class="nav-link" data-i18n="nav-me">04 // ME</a></li>
+            <li><a href="#timeline" class="nav-link" data-i18n="nav-timeline">05 // TIMELINE</a></li>
+            <li><a href="#gallery" class="nav-link" data-i18n="nav-visual">06 // VISUAL</a></li>
         </ul>
-        <div class="nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="nav-right">
+            <button id="lang-toggle" class="lang-toggle">中文</button>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -52,7 +68,7 @@
                 <h1 class="entry-title glitch" data-text="SYSTEM_INITIALIZED">SYSTEM_INITIALIZED</h1>
             </div>
             <p class="entry-subtitle">User Name:Kaicheng (Kai) Chu</p>
-            <p class="entry-description">Engineer // LLM// Data // Development</p>
+            <p class="entry-description" data-i18n="entry-description">Engineer // LLM // Data // Development</p>
             <div class="entry-stats">
                 <div class="stat-item stat-item-progress">
                     <span class="stat-value" id="day-progress-value">0%</span>
@@ -71,7 +87,7 @@
                 </div>
             </div>
             <a href="#professional" class="cta-button">
-                <span>READ_ME</span>
+                <span data-i18n="cta-text">READ_ME</span>
                 <div class="button-glow"></div>
             </a>
         </div>
@@ -85,12 +101,12 @@
     <section id="professional" class="section professional-section">
         <div class="container">
             <h2 class="section-title">
-                <span class="section-number">02 //</span> PROFESSIONAL_EXPERIENCES
+                <span class="section-number">02 //</span> <span data-i18n="section-professional">PROFESSIONAL_EXPERIENCES</span>
             </h2>
 
             <!-- Experiences -->
             <div class="subsection">
-                <h3 class="subsection-title">{'INTERNSHIP'}</h3>
+                <h3 class="subsection-title" data-i18n="subsection-internship">{'INTERNSHIP'}</h3>
                 <div class="experiences-grid">
                     <div class="experience-card">
                         <div class="card-header">
@@ -105,10 +121,7 @@
                             <span class="card-location">Sichuan, Chengdu</span>
                         </div>
                         <div class="card-content">
-                            <p>Built automated ETL pipelines processing 1000+ US/HK/CN stock filings: HTML→PDF→TOC→section
-                                embeddings→summary, enabling real-time investment insights; supported both daily scheduled 
-                                runs and per-stock queries.</p>
-
+                            <p data-i18n="exp1-desc">Built automated ETL pipelines processing 1000+ US/HK/CN stock filings: HTML→PDF→TOC→section embeddings→summary, enabling real-time investment insights; supported both daily scheduled runs and per-stock queries.</p>
                             <div class="card-tags">
                                 <span class="tag">Python</span>
                                 <span class="tag">POSTGRESQL</span>
@@ -123,7 +136,7 @@
                         <div class="card-header">
                             <div class="card-icon">🚀</div>
                             <div class="card-title-group">
-                                <h4 class="card-title">Researcher Asistant</h4>
+                                <h4 class="card-title">Research Assistant</h4>
                                 <p class="card-company">University of Virginia-Computer Science Department</p>
                             </div>
                         </div>
@@ -132,7 +145,7 @@
                             <span class="card-location">Charlottesville, VA</span>
                         </div>
                         <div class="card-content">
-                            <p>Research on Individual + Team level predictors of project/course grades under Project-Based Learning Courses setting.</p>
+                            <p data-i18n="exp2-desc">Research on Individual + Team level predictors of project/course grades under Project-Based Learning Courses setting.</p>
                             <div class="card-tags">
                                 <span class="tag">R</span>
                                 <span class="tag">Statistical Modeling</span>
@@ -156,7 +169,7 @@
                             <span class="card-location">Shaoxing, Zhejiang</span>
                         </div>
                         <div class="card-content">
-                            <p>Selected for a student career program featuring a team-based project competition to design and implement a company logging system from scratch, covering requirements elicitation, system design, development, beta testing, and final presentation.</p>
+                            <p data-i18n="exp3-desc">Selected for a student career program featuring a team-based project competition to design and implement a company logging system from scratch, covering requirements elicitation, system design, development, beta testing, and final presentation.</p>
                             <div class="card-tags">
                                 <span class="tag">Java</span>
                                 <span class="tag">MySQL</span>
@@ -171,11 +184,11 @@
 
             <!-- Skills -->
             <div class="subsection skills-subsection">
-                <h3 class="subsection-title">{'SKILL_MATRIX'}</h3>
+                <h3 class="subsection-title" data-i18n="subsection-skills">{'SKILL_MATRIX'}</h3>
                 <div class="skills-container">
-                    
+
                     <div class="skill-category">
-                        <h4 class="category-title">Languages</h4>
+                        <h4 class="category-title" data-i18n="skill-languages">Languages</h4>
                         <div class="card-tags">
                             <span class="tag">Python</span>
                             <span class="tag">SQL</span>
@@ -185,7 +198,7 @@
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">Data & ML Systems</h4>
+                        <h4 class="category-title" data-i18n="skill-data-ml">Data & ML Systems</h4>
                         <div class="card-tags">
                             <span class="tag">ETL pipelines</span>
                             <span class="tag">async processing</span>
@@ -197,7 +210,7 @@
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">Data & Infra</h4>
+                        <h4 class="category-title" data-i18n="skill-infra">Data & Infra</h4>
                         <div class="card-tags">
                             <span class="tag">PostgreSQL</span>
                             <span class="tag">Milvus</span>
@@ -207,7 +220,7 @@
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">Machine Learning / AI</h4>
+                        <h4 class="category-title" data-i18n="skill-ai">Machine Learning / AI</h4>
                         <div class="card-tags">
                             <span class="tag">PyTorch</span>
                             <span class="tag">scikit-learn</span>
@@ -222,7 +235,7 @@
                     </div>
 
                     <div class="skill-category">
-                        <h4 class="category-title">Backend & Tools</h4>
+                        <h4 class="category-title" data-i18n="skill-backend">Backend & Tools</h4>
                         <div class="card-tags">
                             <span class="tag">FastAPI</span>
                             <span class="tag">Linux</span>
@@ -237,25 +250,78 @@
         </div>
     </section>
 
-    <!-- Section 02.5: Projects -->
+    <!-- Section 03: Projects -->
     <section id="projects" class="section projects-section">
         <div class="container">
             <h2 class="section-title">
-                <span class="section-number">03 //</span> PROJECT_DATABASE
+                <span class="section-number">03 //</span> <span data-i18n="section-projects">PROJECT_DATABASE</span>
             </h2>
             <div class="projects-grid">
-                <!-- Project Card Placeholder 1 -->
+
+                <!-- News Agent Collector -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">[News Agent Collector]</h3>
+                        <span class="project-status online">ONLINE</span>
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">FastAPI</span>
+                        <span class="tech-badge">PostgreSQL</span>
+                        <span class="tech-badge">Redis</span>
+                        <span class="tech-badge">Docker</span>
+                        <span class="tech-badge">Groq LLM</span>
+                        <span class="tech-badge">Cloudflare Workers</span>
+                    </div>
+                    <ul class="project-desc-list" data-i18n-html="project-news">
+                        <li>Personalized news discovery system that aggregates articles from 8+ sources (EventRegistry, Tavily, arXiv, Hacker News, GitHub Trending), scores them against evolving user interest profiles, and delivers a curated HTML digest via email at every macOS login — zero manual steps.</li>
+                        <li>Built a multi-stage processing pipeline: normalize → deduplicate → classify → two-level LLM summarization (Groq Llama 3.3 70B); idempotent delivery enforced at the database level ensures exactly one email per day regardless of how many times the machine boots.</li>
+                        <li>Implemented a behavioral feedback loop via a Cloudflare Worker click-tracking relay: every article link in the email redirects through the worker, logs the click to KV storage, then redirects to the real URL; domain interest weights auto-adjust on the next boot.</li>
+                        <li>Designed an async FastAPI backend with SQLAlchemy + PostgreSQL + Redis, containerized with Docker Compose; the server boots, delivers, and shuts itself down cleanly — no persistent background processes.</li>
+                    </ul>
+                    <div class="project-links">
+                        <a href="https://github.com/ckc-kai/News-Agent-Collector" class="project-link" target="_blank" rel="noopener noreferrer">[ GitHub ]</a>
+                    </div>
+                </div>
+
+                <!-- Personalized Stock Trader -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">[Personalized Stock Trader]</h3>
+                        <span class="project-status dev">IN TESTING</span>
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">LLM</span>
+                        <span class="tech-badge">GARCH</span>
+                        <span class="tech-badge">Monte Carlo</span>
+                        <span class="tech-badge">Yahoo Finance</span>
+                        <span class="tech-badge">SQLite</span>
+                        <span class="tech-badge">Backtesting</span>
+                    </div>
+                    <ul class="project-desc-list" data-i18n-html="project-trader">
+                        <li>AI-powered stock consultant running a 7-stage discovery funnel (macro regime detection → sector ETF scoring → S&P 500 universe → hard filters → quant pre-score → LLM fundamental review → top 10) to surface actionable candidates without needing a ticker.</li>
+                        <li>Built a 6-layer quantitative scoring engine (trend, momentum, volatility, volume, mean-reversion, aggregate) with regime-adaptive weights; 20 thresholds externalized and calibrated via differential evolution with overfit guards (validation IC must be ≥50% of training IC).</li>
+                        <li>Implemented a two-tier Monte Carlo simulation: GARCH(1,1)+Student-t for volatility clustering and fat tails when ≥60 days of data available, with GBM+EWMA fallback; earnings days within the forecast horizon receive inflated volatility.</li>
+                        <li>Validated with a no-lookahead walk-forward backtesting engine across 25 diverse scenarios (379 tests total); generates full HTML reports covering position sizing, stop-loss, and sector-normalized signal output.</li>
+                    </ul>
+                    <div class="project-links">
+                        <span style="font-family: var(--font-primary); font-size: var(--font-size-sm); color: var(--color-gray-300); text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">[ Private Repository ]</span>
+                    </div>
+                </div>
+
+                <!-- E-Commerce Customer Analytics -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">[E-Commerce Customer Analytics & Conversion Optimization]</h3>
-                        <span class="project-status online">ARCHIVED</span>
+                        <span class="project-status offline">ARCHIVED</span>
                     </div>
                     <div class="project-tech">
                         <span class="tech-badge">PySpark</span>
                         <span class="tech-badge">NLP</span>
                         <span class="tech-badge">A/B Testing</span>
                     </div>
-                    <ul class="project-desc-list">
+                    <ul class="project-desc-list" data-i18n-html="project-ecommerce">
                         <li>Analyzed 1.3M+ user records from reviews, transactions, and marketing campaigns in an e-commerce environment. Delivered actionable insights linking text sentiment, engagement behavior, and conversion outcomes.</li>
                         <li>Preprocessed and engineered features from large-scale structured and unstructured data (310K+ transactions, 560K+ reviews) using PySpark+Pandas for distributed data cleaning, EDA, and feature preprocessing.</li>
                         <li>Applied NLP techniques (tokenization, N-Gram, TF-IDF vectorization) to extract product sentiment and reviewer satisfaction; trained Logistic Regression and Random Forest classifiers achieving AUC = 0.96.</li>
@@ -264,84 +330,86 @@
                     </ul>
                 </div>
 
-                <!-- Project Card Placeholder 2 -->
+                <!-- Real-time Emotion Recognition -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">[Real-time Emotion Recognition]</h3>
                         <span class="project-status offline">ARCHIVED</span>
                     </div>
                     <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">PyTorch</span>
                         <span class="tech-badge">Computer Vision</span>
                         <span class="tech-badge">Deep Learning</span>
                     </div>
-                    <ul class="project-desc-list">
+                    <ul class="project-desc-list" data-i18n-html="project-emotion">
                         <li>Built a real-time emotion recognition application integrating OpenCV for face detection and PyTorch for deep neural network model.</li>
                         <li>Fine-tuned a ResNet-169 pretrained on ImageNet by unfreezing final convolutional and fully connected layers; applied data augmentation, batch normalization, dropout, and cross-entropy loss optimization.</li>
                         <li>Designed a custom dual-branch CNN (MultiScale EmotionCNN) combining 48×48 and 24×24 feature paths with adaptive pooling and fusion (2880-dim vector) for multi-scale facial feature extraction, achieving 65% test accuracy.</li>
-                        <li>Built an automated data preprocessing and augmentation pipeline (cropping, resizing, grayscale normalization) using torchvision.transforms.</li>
-                        <li>Achieved ~70% classification accuracy across 6 emotion classes (with fine-tuned ResNet-169); deployed a live webcam demo performing real-time face detection, passing into tensor transformation (model), resulting emotion label overlay.</li>
+                        <li>Achieved ~70% classification accuracy across 6 emotion classes (with fine-tuned ResNet-169); deployed a live webcam demo performing real-time face detection, tensor transformation, and emotion label overlay.</li>
                     </ul>
+                    <div class="project-links">
+                        <a href="https://github.com/ckc-kai/DeepLearning247A/tree/cnn_transformer_code" class="project-link" target="_blank" rel="noopener noreferrer">[ GitHub ]</a>
+                    </div>
                 </div>
 
-                <!-- Project Card Placeholder 3 -->
+                <!-- Charlottesville Travel Planner -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">[Charlottesville Travel Planner]</h3>
                         <span class="project-status online">ONLINE</span>
                     </div>
                     <div class="project-tech">
-                        <span class="tech-badge">[Python-Django]</span>
-                        <span class="tech-badge">[Google API]</span>
-                        <span class="tech-badge">[HTML/CSS]</span>
-                        <span class="tech-badge">[Testing]</span>
+                        <span class="tech-badge">Python-Django</span>
+                        <span class="tech-badge">Google API</span>
+                        <span class="tech-badge">HTML/CSS</span>
+                        <span class="tech-badge">Selenium</span>
                     </div>
-                    <ul class="project-desc-list">
+                    <ul class="project-desc-list" data-i18n-html="project-cville">
                         <li>Engineered a travel review platform leveraging Python/Django (MVC architecture) and integrated Google Maps API for dynamic, location-based service rendering.</li>
                         <li>Implemented secure user authentication via the Google Login API and designed a role-based authorization system (Admin/Regular User) to enhance data security and management efficiency.</li>
                         <li>Developed a Travel Recommendation Algorithm that utilizes user preferences and available time constraints to generate optimized schedules via a custom distance-calculation and review score ranking algorithm.</li>
-                        <li>Developed a scalable review submission pipeline, validating user inputs and persisting data via a Django database.</li>
-                        <li>Conducted unit, system, tests, and GUI testing with Selenium, Gathered user feedback during a beta testing phase.</li>
+                        <li>Conducted unit, system, and GUI testing with Selenium; gathered user feedback during a beta testing phase and iterated based on results.</li>
                     </ul>
-    
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Section 03: Biography -->
+    <!-- Section 04: Biography -->
     <section id="biography" class="section biography-section">
         <div class="container">
             <h2 class="section-title">
-                <span class="section-number">03 //</span> BIOGRAPHY_DATA
+                <span class="section-number">04 //</span> <span data-i18n="section-biography">BIOGRAPHY_DATA</span>
             </h2>
 
             <div class="bio-grid">
                 <!-- About Me -->
                 <div class="bio-card">
                     <div class="bio-header">
-                        <div class="bio-icon">👤</div>
+                        <div class="bio-icon"><img src="pictures/icon.JPG" alt="Kaicheng Chu" class="profile-avatar"></div>
                         <h3 class="bio-title">ABOUT_ME</h3>
                     </div>
                     <div class="bio-content">
-                        <p>Currently pursuing a Data Science Master Degree, seeking to leverage Python, SQL, and advanced analytics to drive data-
-                            informed business decisions, with a strong foundational knowledge in Computer Science, Statistics, and Data Science.</p>
+                        <p data-i18n="about-p1">Currently pursuing a Data Science Master Degree, seeking to leverage Python, SQL, and advanced analytics to drive data-informed business decisions, with a strong foundational knowledge in Computer Science, Statistics, and Data Science.</p>
 
-                        <p>To be Continued!</p>
+                        <p data-i18n="about-p2">I build systems that actually run in production — data pipelines processing thousands of financial filings, recommendation engines that adapt from user feedback, and AI agents that deliver real output on a schedule. My work sits at the intersection of machine learning, data engineering, and systems design; I care about the whole stack, from raw data ingestion to the final user-facing output. Outside the terminal, you'll find me on the tennis court, at the gym, or deep in a book.</p>
 
                         <p>"Don't let the noise of others' opinions drown out your own inner voice. And most important, have the courage to follow your heart and intuition." - Steve Jobs</p>
-                        <p>要么及时改正，要么执迷不悟一辈子</p>
+                        <p>"Usque ad mortem"</p>
                         <div class="bio-highlights">
                             <div class="highlight-item">
                                 <span class="highlight-icon">🎯</span>
-                                <span>Detail-oriented perfectionist</span>
+                                <span data-i18n="highlight-1">Detail-oriented perfectionist</span>
                             </div>
                             <div class="highlight-item">
                                 <span class="highlight-icon">🌐</span>
-                                <span>Faster Learner</span>
+                                <span data-i18n="highlight-2">Faster Learner</span>
                             </div>
                             <div class="highlight-item">
                                 <span class="highlight-icon">🚀</span>
-                                <span>Innovation enthusiast</span>
+                                <span data-i18n="highlight-3">Innovation enthusiast</span>
                             </div>
                         </div>
                     </div>
@@ -359,18 +427,16 @@
                             <h4 class="edu-degree">Bachelor of Science in Statistics</h4>
                             <p class="edu-school">University of Virginia</p>
                             <p class="edu-duration">2021 - 2025</p>
-                            <p class="edu-description">Specialized in Machine Learning, Algorithm, Data Analysis</p>
+                            <p class="edu-description" data-i18n="edu-uva-desc">Specialized in Machine Learning, Algorithm, Data Analysis</p>
                         </div>
                         <div class="education-item">
                             <h4 class="edu-degree">Master of Science in Data Science</h4>
-                            <p class="edu-school">Unicersity of California, Los Angeles</p>
+                            <p class="edu-school">University of California, Los Angeles</p>
                             <p class="edu-duration">2025 - present</p>
-                            <p class="edu-description">Focus on Advanced/Large-scale machine learning, deep learning, and distributed systems</p>
+                            <p class="edu-description" data-i18n="edu-ucla-desc">Focus on Advanced/Large-scale machine learning, deep learning, and distributed systems</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Certifications -->
 
                 <!-- Interests -->
                 <div class="bio-card">
@@ -380,11 +446,11 @@
                     </div>
                     <div class="bio-content">
                         <div class="interests-grid">
-                            <div class="interest-tag">Cybersecurity</div>
-                            <div class="interest-tag">AI/ML Integration</div>
-                            <div class="interest-tag">Deep Learning</div>
-                            <div class="interest-tag">Performance Optimization</div>
-                            <div class="interest-tag">Database</div>
+                            <div class="interest-tag" data-i18n="interest-cyber">Cybersecurity</div>
+                            <div class="interest-tag" data-i18n="interest-ai-ml">AI/ML Integration</div>
+                            <div class="interest-tag" data-i18n="interest-dl">Deep Learning</div>
+                            <div class="interest-tag" data-i18n="interest-perf">Performance Optimization</div>
+                            <div class="interest-tag" data-i18n="interest-db">Database</div>
                             <div class="interest-tag">Tennis🎾</div>
                             <div class="interest-tag">Reading📖</div>
                             <div class="interest-tag">Gym🏋️</div>
@@ -417,13 +483,12 @@
     <section id="timeline" class="section timeline-section">
         <div class="container">
             <h2 class="section-title">
-                <span class="section-number">04 //</span> LOG_HISTORY
+                <span class="section-number">05 //</span> <span data-i18n="section-timeline">LOG_HISTORY</span>
             </h2>
 
             <div class="timeline-container">
                 <div class="timeline-line"></div>
 
-            
                 <div class="timeline-item" data-year="2022">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
@@ -452,7 +517,7 @@
                     <div class="timeline-content">
                         <span class="timeline-date">2024.02 - 2025.08</span>
                         <h4 class="timeline-title">University of Virginia</h4>
-                        <p class="timeline-description">Researcher Assistant - Computer Science Department</p>
+                        <p class="timeline-description" data-i18n="timeline-researcher">Research Assistant - Computer Science Department</p>
                         <div class="timeline-tags">
                             <span class="tag">Research</span>
                         </div>
@@ -464,7 +529,7 @@
                     <div class="timeline-content">
                         <span class="timeline-date">2024.05 - 2024.08</span>
                         <h4 class="timeline-title">Zhejiang Pushkang Biotechnology Co.,ltd</h4>
-                        <p class="timeline-description">Full-stack Developer Internship</p>
+                        <p class="timeline-description" data-i18n="timeline-fullstack">Full-stack Developer Internship</p>
                         <div class="timeline-tags">
                             <span class="tag">Internship</span>
                             <span class="tag">Developer</span>
@@ -477,7 +542,7 @@
                     <div class="timeline-content">
                         <span class="timeline-date">2025.06 - 2025.08</span>
                         <h4 class="timeline-title">Chengdu Jifeng Elf Artificial Intelligence Technology</h4>
-                        <p class="timeline-description">Data Engineer Internship</p>
+                        <p class="timeline-description" data-i18n="timeline-de">Data Engineer Internship</p>
                         <div class="timeline-tags">
                             <span class="tag">Internship</span>
                             <span class="tag">Data Engineer</span>
@@ -502,133 +567,57 @@
                     <div class="timeline-content">
                         <span class="timeline-date">2026 - FUTURE</span>
                         <h4 class="timeline-title">To Be Explored</h4>
-                        <p class="timeline-description">Everything is possible! Stay positive and keep learning!</p>
+                        <p class="timeline-description" data-i18n="timeline-future">Everything is possible! Stay positive and keep learning!</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section 05: Visual Database (Photo Wall) -->
+    <!-- Section 06: Visual Database (Photo Wall) -->
     <section id="gallery" class="section gallery-section">
         <div class="container">
             <h2 class="section-title">
-                <span class="section-number">05 //</span> VISUAL_DATABASE
+                <span class="section-number">06 //</span> <span data-i18n="section-gallery">VISUAL_DATABASE</span>
             </h2>
 
-            <div class="photo-wall">
-                <div class="photo-item" data-tilt style="--delay: 0.1s">
-                    <img src="pictures/p1.jpg" alt="Memory 01">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Sea Fishing</span>
-                    </div>
-                </div>
-
-                <div class="photo-item large" data-tilt style="--delay: 0.2s">
-                    <img src="pictures/p4.JPG" alt="Memory 02">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Happy Graduate!</span>
-                    </div>
-                </div>
-
-                <div class="photo-item" data-tilt style="--delay: 0.3s">
-                    <img src="pictures/p2.JPG" alt="Memory 03">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Ocean</span>
-                    </div>
-                </div>
-
-                <div class="photo-item wide" data-tilt style="--delay: 0.4s">
-                    <img src="pictures/p3.JPG" alt="Memory 04">
-                    <div class="photo-overlay">
-                        <span class="photo-label">yxp!</span>
-                    </div>
-                </div>
-
-                <div class="photo-item large" data-tilt style="--delay: 0.5s">
-                    <img src="pictures/p5.JPG" alt="Memory 05">
-                    <div class="photo-overlay">
-                        <span class="photo-label">zjh!</span>
-                    </div>
-                </div>
-
-                <div class="photo-item tall" data-tilt style="--delay: 0.6s">
-                    <img src="pictures/p6.JPG" alt="Memory 06">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Bye UVA</span>
-                    </div>
-                </div>
-
-                <div class="photo-item" data-tilt style="--delay: 0.7s">
-                    <img src="pictures/p8.JPG" alt="Memory 07">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Bros</span>
-                    </div>
-                </div>
-
-                <div class="photo-item large" data-tilt style="--delay: 0.8s">
-                    <img src="pictures/p7.JPG" alt="Memory 08">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Fam</span>
-                    </div>
-                </div>
-
-                <div class="photo-item" data-tilt style="--delay: 0.9s">
-                    <img src="pictures/p10.JPG" alt="Memory 09">
-                    <div class="photo-overlay">
-                        <span class="photo-label">ckc</span>
-                    </div>
-                </div>
-
-                <div class="photo-item wide" data-tilt style="--delay: 1s">
-                    <img src="pictures/p9.JPG" alt="Memory 10">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Bros</span>
-                    </div>
-                </div>
-
-                <div class="photo-item" data-tilt style="--delay: 1.1s">
-                    <img src="pictures/p11.JPG" alt="Memory 11">
-                    <div class="photo-overlay">
-                        <span class="photo-label">yxp!</span>
-                    </div>
-                </div>
-
-                <div class="photo-item" data-tilt style="--delay: 1.2s">
-                    <img src="pictures/p12.JPG" alt="Memory 12">
-                    <div class="photo-overlay">
-                        <span class="photo-label">Hi Boston</span>
-                    </div>
-                </div>
-            </div>
+            <!-- Photo wall is built dynamically by initPhotoWall() in script.js.
+                 To add photos: edit the PHOTO_GALLERY array in script.js. -->
+            <div class="photo-wall"></div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
+            <div class="footer-seal">
+                <img src="pictures/monogram.png" alt="KC Monogram" class="footer-monogram">
+            </div>
             <div class="footer-content">
                 <div class="footer-section">
                     <h4 class="footer-title">CONNECT</h4>
                     <div class="social-links">
-                        <a href="https://www.linkedin.com/in/kaicheng-chu-a96b6821b/" class="social-link">LinkedIn</a>
+                        <a href="https://www.linkedin.com/in/kaicheng-chu-a96b6821b/" class="social-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a href="https://github.com/ckc-kai" class="social-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="mailto:chukaicheng1@gmail.com" class="social-link">chukaicheng1@gmail.com</a>
+                        <a href="mailto:chu_kaicheng915@163.com" class="social-link">chu_kaicheng915@163.com</a>
                     </div>
                 </div>
                 <div class="footer-section">
                     <h4 class="footer-title">SYSTEM_INFO</h4>
-                    <p class="footer-text">Nice to meet you!</p>
-                    <p class="footer-text">Version: 1.0.2 // Build: 2026.02.26</p>
+                    <p class="footer-text" data-i18n="footer-greeting">Nice to meet you!</p>
+                    <p class="footer-text">Version: 1.0.3 // Build: 2026.04.12</p>
                 </div>
                 <div class="footer-section">
                     <h4 class="footer-title">STATUS</h4>
                     <div class="status-indicator">
                         <span class="status-dot"></span>
-                        <span class="status-text">ALL SYSTEMS OPERATIONAL</span>
+                        <span class="status-text" data-i18n="status-text">ALL SYSTEMS OPERATIONAL</span>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Kaicheng (Kai) Chu. All rights reserved. // SYSTEM_LOG</p>
+                <p>&copy; 2026 Kaicheng (Kai) Chu. All rights reserved. // SYSTEM_LOG</p>
             </div>
         </div>
     </footer>
