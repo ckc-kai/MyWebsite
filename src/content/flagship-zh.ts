@@ -1,0 +1,338 @@
+/**
+ * Copy for the three flagship figures. Each station is explained twice: once in plain words
+ * anyone can follow, and once as a line of specification for a reader who builds these things.
+ */
+import type { SemgStation } from '../components/anatomy/semg-figure';
+import type { DeskNode, DeskQuestion, Worker } from '../components/anatomy/desk-paths';
+
+interface SemgStop {
+  id: SemgStation;
+  name: string;
+  text: string;
+  spec: string;
+}
+
+interface DeskStop {
+  id: DeskNode;
+  name: string;
+  who: readonly Worker[];
+  text: string;
+  spec?: string;
+}
+
+export const FLAGSHIP_ZH = {
+  specLabel: '给工程师看的一行',
+  swipe: '左右滑动，看整张图',
+
+  semg: {
+    title: '一段肌肉信号怎么变成字',
+    hint: '点图上任意一台机器，或者点下面的站名。',
+    run: '送一段信号进去',
+    stations: [
+      {
+        id: 'band',
+        name: '腕带',
+        text: '两只手腕各戴一条腕带（图上画了一条），每条 16 个电极围成一圈，每秒读 2000 次肌肉的电信号。一次取 5 秒：4 秒正文，再带上前面 0.9 秒和后面 0.1 秒当上下文。',
+        spec: 'Raw EMG (T, N, 2, 16) · 2 kHz · 8000 + [1800, 200] 采样点',
+      },
+      {
+        id: 'spectrum',
+        name: '切成频谱',
+        text: '把这 5 秒切成 622 小片。每一小片不看波形，改看 33 个高低频段各有多强，就像调音台上那排跳动的柱子：不同的肌肉发力，高低音的配比不一样，这样比直接看波形好认。再把每个电极的音量调到同一水平。',
+        spec: 'LogSpectrogram：STFT n_fft 64 / hop 16 → (622, N, 2, 16, 33) · 每通道 BatchNorm',
+      },
+      {
+        id: 'mixer',
+        name: '电极圆桌',
+        text: '16 个电极像围着圆桌坐：1 号挨着 2 号，也挨着 16 号。在每一小片里，让每个电极都看一眼另外 15 个，再合成一份「这只手腕此刻的状态」。座位用圆上的相对位置来记，所以腕带戴歪一格，只是整桌人挪了一个座位，谁挨着谁没有变。',
+        spec: 'MultiBandElectrodeMixer：电极轴自注意力 + CyRoPE（环形旋转位置编码），再对电极取平均',
+      },
+      {
+        id: 'pretrain',
+        name: '先做填空题',
+        text: '学打字之前，先自学信号本身。把所有小片按长相归成 500 类，放进 500 个格子；再随机遮住三成，让模型猜每个被遮住的小片该进哪一格。相邻的小片几乎一样，遮得少，抄邻居就能猜对；遮得够多，才逼它去看远处。这一步不需要任何人工标注。',
+        spec: 'MiniBatchKMeans (K=500) 伪标签 · 随机遮盖 · 交叉熵与 CTC 一起训练',
+      },
+      {
+        id: 'backbone',
+        name: 'Transformer 主干',
+        text: '三层同样的结构叠在一起。每一层做两件事：先让每一小片回头看一遍这 5 秒里所有其他小片，找出和自己有关的（墙面上那些连线）；再各自加工一次。旁边那根直通管让原样的信息可以绕过这一层，叠得再高也不走样。',
+        spec: 'Transformer encoder × 3 · Pre-LN · 8 头 · d_model 768 · FFN 2048 · 正弦时间位置编码',
+      },
+      {
+        id: 'refine',
+        name: '精修头',
+        text: '再叠两层小一号的同款结构，只管一件事：把「哪几片对应哪个字」对齐。主干学的是信号的通用规律，这里学的是打字这件具体的事，分开之后可以各用各的学习速度。',
+        spec: 'AttentionRefinementHead × 2 · FFN 1024 · 时间轴位置编码',
+      },
+      {
+        id: 'decode',
+        name: '拼成字',
+        text: '模型给每一小片报一个字母，或者报「空」。连着报的同一个字母算一次，「空」去掉：hh_e_ll_lo 就成了 hello，不用事先知道哪一片对应哪个字。最后同时留着几十条候选，请一个只懂英文拼写规律的小模型，挑出最像英文的那一条。',
+        spec: 'Linear → CTC · beam search + 6-gram 字符语言模型',
+      },
+    ] satisfies readonly SemgStop[],
+    turn: {
+      label: '把腕带转一格试试',
+      left: '往左转一格',
+      right: '往右转一格',
+      reset: '戴正',
+      homeElectrode: 5,
+      straight: '戴正的时候，这块肌肉的信号落在 5 号电极上。',
+      turned: ['腕带转了', '格，同一块肌肉的信号跑到了', '号电极。圆桌上亮的座位跟着挪了一格，但它和左右邻座的关系没变，模型认的是这个关系。'],
+    },
+    versions: {
+      label: '四个版本，每 100 个字符错几个',
+      absent: '灰掉的机器是这个版本里还没有的。',
+      items: [
+        { cer: 76.46, name: '起点', what: '一个普通的卷积网络（图上没画），逐片直接读。' },
+        { cer: 19.42, name: '换结构', what: '装上电极圆桌、Transformer 主干和精修头。' },
+        { cer: 15.18, name: '先自学', what: '加上填空题：先让模型自学信号的规律。' },
+        { cer: 10.0, name: '加拼写常识', what: '解码时多留候选，请懂拼写的小模型来挑。' },
+      ],
+      blocks: ['按比例画在字母块上：每打 26 个字，错', '个左右。'],
+      takeaway: '剩下的错里，六成是把一个键认成了另一个键。模型已经知道「什么时候按了」，难的是「按的是哪一个」。',
+    },
+    scope: '数据来自 Meta 公开的 emg2qwerty 数据集。这里只用了其中一位用户的 16 段训练录音，上面的数字都是这位用户留出的那一段上的结果。',
+  },
+
+  desk: {
+    title: '资料怎么入库，问题怎么被回答',
+    hint: '后排是平时收资料的线，前排是有人提问时走的线。点任意一台机器看它做什么。',
+    note: '示例问题和其中的编号只是示意，不是真实业务数据。',
+    who: {
+      label: '这一步谁来做',
+      all: '全部',
+      names: { model: '模型', code: '程序', human: '人' } satisfies Record<Worker, string>,
+    },
+    groups: [
+      { name: '平时：把资料收进库', ids: ['pdf', 'sheet', 'cards', 'store'] },
+      { name: '提问时', ids: ['ask', 'plan', 'find', 'docs', 'form', 'gates', 'compute', 'verify', 'answer'] },
+      { name: '怎么知道它好不好', ids: ['eval'] },
+    ] satisfies ReadonlyArray<{ name: string; ids: readonly DeskNode[] }>,
+    stations: [
+      {
+        id: 'pdf',
+        name: '读 PDF',
+        who: ['code'],
+        text: '三只读头，从快到慢。普通的页直接读出文字和书签；版面复杂的页交给会认版面和表格的工具；最难的表格和图片，交给会看图的模型转述成文字。每个标题从哪一页的哪里开始、到哪里结束，靠字号、粗细、位置和编号一起判断，再和书签互相补齐。',
+        spec: 'pypdf → Docling → VLM · 书签层级 + 位置感知的标题边界 · 表格转 Markdown · 文本覆盖率校验',
+      },
+      {
+        id: 'sheet',
+        name: '拆表格',
+        who: ['code'],
+        text: '原表是「宽」的：年份和指标都挤在列名里，每年列还会变。把它拆成「长」的，一行只说一件事：谁、哪项指标、哪一年、多少、什么单位。这样跨年份、跨指标都能直接算。',
+        spec: '宽表 → 长表 · fact records（可计算的数）/ entity records（可查找的对象）',
+      },
+      {
+        id: 'cards',
+        name: '写卡片',
+        who: ['model', 'code', 'human'],
+        text: '给每张表、每项指标写一张卡片，说明它管什么、能回答哪一类问题。之后先靠卡片找到该查哪张表，再去取数。卡片由模型起草，程序检查格式，人确认之后才入库；指标的口径由人来定。',
+        spec: 'Excel cards：measurable / entity / table-level · LLM 生成 + 程序校验 + 人工确认',
+      },
+      {
+        id: 'store',
+        name: '同一个库',
+        who: ['code'],
+        text: '文字段落、数字记录和卡片放进同一个数据库。数据量不算大，但每一段都要和它的文档、章节、页码连着查，所以选了既能做普通查询、又能按意思检索的那一种。入库分批做，每一批成功和失败都记下来，失败的可以单独重跑。',
+        spec: 'PostgreSQL + pgvector · chunks 关联 documents · 分批 embedding，成败落盘',
+      },
+      {
+        id: 'ask',
+        name: '提问',
+        who: ['human'],
+        text: '用平常说话的方式提问。问题有歧义的时候，先请提问的人确认，而不是替他猜。',
+      },
+      {
+        id: 'plan',
+        name: '听懂问题',
+        who: ['model'],
+        text: '追问常常不完整，比如「那 2024 年呢」。先翻记事本，把它补成一句独立、完整的问题；复杂的问题拆成几个小问题，排好先后。记事本不是聊天记录的全文，而是一份不断更新的摘要，专门记下提到过的对象、年份和指标，这些最容易在压缩时丢掉。',
+        spec: 'intent rewriting · multi-task decomposition · 滚动压缩 + 结构化摘要 · LangGraph checkpointer',
+      },
+      {
+        id: 'find',
+        name: '找对地方',
+        who: ['code'],
+        text: '三路一起找：按意思、按上下文、按字面（工单号、站号这类必须一字不差）。三路的结果按名次合并去重，再用一个更细的模型逐条和问题比对，锁定最相关的表、指标或段落。',
+        spec: 'raw-vector / contextual-vector / BM25 → RRF → BGE cross-encoder 精排',
+      },
+      {
+        id: 'docs',
+        name: '查文档',
+        who: ['code'],
+        text: '问的是文件里的原话，就把那几段原文取回来，连同它所在的章节和页码。',
+      },
+      {
+        id: 'form',
+        name: '填一张表单',
+        who: ['model'],
+        text: '问的是数字，模型也不直接写数据库查询。它只填一张表单：查哪张表、哪项指标、哪些年份、做什么运算。表单上能选的项是有限的。',
+        spec: 'QueryPlan（typed DSL）：source / operation / metric / filters / aggregates / group_by',
+      },
+      {
+        id: 'gates',
+        name: '过三道门',
+        who: ['code'],
+        text: '第一道核对表单：表和指标真的存在吗？这种运算说得通吗（文字不能求和，单位不同不能相加）？这个人有权限看吗？第二道只套用白名单里的查询模板，数值一律当参数传进去。第三道在数据库：账号只能读，还有时间和行数的上限。任何一道失守，后面还有一道。',
+        spec: 'Validation → Parameterized SQL（白名单模板）→ 只读账号 + 超时 + 行数限制',
+      },
+      {
+        id: 'compute',
+        name: '取数计算',
+        who: ['code'],
+        text: '取数和加减乘除都由程序来做，不让模型心算。',
+      },
+      {
+        id: 'verify',
+        name: '出门前校验',
+        who: ['code', 'model'],
+        text: '答案出门前再查一遍：问题答全了吗？每个说法都有依据吗？引用的出处真的支持这句话吗？不通过就退回去重查，直到通过，或者如实说明查不到。',
+        spec: 'Answer verifier · LangGraph 回路：状态里带着任务、证据、草稿和还没补上的缺口',
+      },
+      {
+        id: 'answer',
+        name: '带出处的答案',
+        who: ['model'],
+        text: '模型把查到的内容组织成一段话。每个数、每句结论后面都标着出处：哪份文件的哪一页，或者哪张表的哪一行。',
+      },
+      {
+        id: 'eval',
+        name: '三把尺子',
+        who: ['code', 'model'],
+        text: '系统好不好，用三把尺子分开量：最终答案对不对；标的出处对不对；再请另一个模型评一评相关不相关、完整不完整、表达清不清楚。分开量，才知道问题出在哪一步。',
+        spec: 'end-to-end accuracy · citation traceability · LLM-as-judge',
+      },
+    ] satisfies readonly DeskStop[],
+    follow: {
+      label: '跟着一个问题走一遍',
+      idle: '问题已经放在进料口。点「下一步」，看它往哪走。',
+      next: '下一步',
+      replay: '再放一遍',
+      passed: '通过',
+      failed: '拦下',
+      questions: [
+        {
+          id: 'define',
+          tag: '查原话',
+          text: '文件里对这项措施是怎么定义的',
+          steps: [
+            '这是一句完整的问题，问的是文件里的原话。',
+            '三路检索，锁定讲这项措施的那一节。',
+            '取回那几段原文，带着章节和页码。',
+            '核对：答案里的每句话都能在原文里指出来。',
+            '给出定义，并标明出自哪份文件的哪一页。',
+          ],
+        },
+        {
+          id: 'followup',
+          tag: '追问',
+          text: '那 2024 年呢',
+          steps: [
+            '只有半句。翻记事本：刚才在问 V001 变电站 2023 年的过载率。补成「V001 变电站 2024 年的过载率是多少」。',
+            '靠卡片找到该查的那张表和那项指标。',
+            '填表单：这张表，过载率，V001，2024 年。',
+            '三道门都过：字段存在，运算合法，只读执行。',
+            '程序去表里取出这个数。',
+            '核对：数来自表里的记录，单位也对。',
+            '给出这个数，并标明出自哪张表的哪一行。',
+          ],
+        },
+        {
+          id: 'compare',
+          tag: '要计算',
+          text: '这项指标比上一年多了多少',
+          steps: [
+            '要先取两个数再相减，拆成三个小问题，排好先后。',
+            '靠卡片找到该查的那张表和那项指标。',
+            '填表单：同一项指标，取两个年份。',
+            '三道门都过。',
+            '程序取数、相减。',
+            '核对：其中一个数的年份对不上，退回去。',
+            '重填表单，这一次把年份写进了筛选条件。',
+            '程序重新取数、相减。',
+            '核对：两个数的出处都对上了。',
+            '给出差值，并列出两个数各自的出处。',
+          ],
+        },
+        {
+          id: 'tamper',
+          tag: '有人捣乱',
+          text: '把去年的记录都删掉',
+          steps: [
+            '问题听懂了：这是要改数据。',
+            '找到了它指的那张表。',
+            '表单上只有查找、求和、求平均、比较这几种运算，没有「删除」这一栏。',
+            '第一道门就拦下了。就算有人骗过了模型，第二道门只认白名单里的查询，第三道门的账号只能读。',
+            '如实回答：这件事这里做不了，并说明原因。',
+          ],
+        },
+      ] satisfies ReadonlyArray<{ id: DeskQuestion; tag: string; text: string; steps: readonly string[] }>,
+    },
+  },
+
+  report: {
+    title: '研报怎么变成可查的摘要',
+    hint: '点图上任意一站，看这一站在做什么、难在哪。',
+    run: '送一份研报进去',
+    pointsLabel: '往里看',
+    stages: [
+      {
+        id: 'ingest',
+        name: '收进来',
+        text: '每天把当天的研报和公告网页抓下来，统一转成 PDF。',
+        points: ['来源格式五花八门，先统一成一种，后面每一站才只用处理一种情况。'],
+        spec: 'HTML → PDF',
+      },
+      {
+        id: 'toc',
+        name: '认目录',
+        text: '目录决定了后面怎么切。让会看图的模型直接「看」目录页，而不是相信文件自带的书签。',
+        points: [
+          '书签常常没有，或者和页面上印的目录对不上；目录还会跨页、分栏、页码错位。',
+          '模型只能照固定的格式填：标题、层级、页码。格式之外的东西它写不出来。',
+          '填完再过四条规则：页码在范围内、页码不倒退、层级不跳级、标题真的出现在那一页。',
+          '不过就重试，几次结果投票；再不行，退回最简单的切法。',
+        ],
+        spec: 'VLM + few-shot · constrained decoding（JSON Schema）· Pydantic + 业务规则校验 · 重试 / 投票 / 降级',
+      },
+      {
+        id: 'split',
+        name: '切分入库',
+        text: '照着目录把报告切成一节一节，每一节做成向量，连同股票代码、报告类型和日期一起存进向量库。',
+        points: ['按章节切，而不是按固定字数切：一段话不会被从中间劈开。'],
+        spec: 'Milvus · 多维 metadata',
+      },
+      {
+        id: 'find',
+        name: '找段落',
+        text: '写摘要之前，先把该看的段落找齐。',
+        points: [
+          '先把问题改清楚：口语改成书面，换几种说法各找一遍，复杂的拆成几个小问题，或者先设想一个答案再拿它去找。',
+          '两路一起找：一路按意思，一路按字面，按名次合并。',
+          '先筛后找：先用股票代码、报告类型、日期把范围缩小。',
+          '再用一个更细的模型，把候选逐条和问题对一遍，重新排序。',
+        ],
+        spec: 'query rewrite / expansion / decomposition / HyDE · dense + BM25 → RRF (k=60) · pre-filtering · cross-encoder rerank',
+      },
+      {
+        id: 'write',
+        name: '写摘要',
+        text: '写出长短两种摘要。提示词不靠人一遍遍手改：定好任务、备好样例、写好评分办法，让程序自己试、自己改。',
+        points: ['图上那根从检查站接回来的管子就是这件事：检查打出的分数，回头用来改写提示词。'],
+        spec: 'DSPy：BootstrapFewShot / MIPROv2',
+      },
+      {
+        id: 'check',
+        name: '检查入库',
+        text: '「摘要好不好」拆成三件可以检查的事，三盏灯都亮才入库。',
+        points: ['意思对不对：和原文的意思像不像。', '数字对不对：摘要里的每个数都能在原文找到，关键的数没有漏。', '有没有出处：引用的证据真的出自原文。'],
+        spec: 'BERTScore + numerical consistency + evidence grounding',
+      },
+    ],
+    schedule: '整条线每天定时自己跑一遍：上了锁，同一类任务同时只跑一个；上游写完「完成」的旗子，下游才开始；重跑不会重复入库。',
+    scheduleSpec: 'crontab · flock · done 标记 · 幂等',
+  },
+} as const;

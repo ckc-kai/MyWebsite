@@ -1,0 +1,127 @@
+---
+import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { FIGURE_SIZE, buildPipelineFigure } from './pipeline-figure';
+import './figure.css';
+import './flagship.css';
+
+const copy = FLAGSHIP_ZH.report;
+const figure = buildPipelineFigure();
+/** The bench leaves empty headroom above the chart board; at this width it is better trimmed. */
+const HEADROOM = 60;
+---
+
+<div
+  class="flag"
+  data-report
+  data-stops={JSON.stringify(figure.stops)}
+  data-running="false"
+  data-no-drag
+  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px`}
+>
+  <header class="figure__label">
+    <h3>{copy.title}</h3>
+    <p>{copy.hint}</p>
+  </header>
+
+  <div class="flag__drawing iso" data-globe-clear>
+    <svg class="iso-svg" viewBox={`0 ${HEADROOM} ${FIGURE_SIZE.width} ${FIGURE_SIZE.height - HEADROOM}`} aria-hidden="true" set:html={figure.svg} />
+  </div>
+  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+
+  <ol class="flag__stepper">
+    {copy.stages.map((stage, index) => (
+      <li>
+        <button type="button" data-step={index} aria-pressed={index === 0 ? 'true' : 'false'}>
+          <b>{index + 1}</b>
+          {stage.name}
+        </button>
+      </li>
+    ))}
+  </ol>
+
+  <div class="flag__panels" data-globe-clear>
+    <section class="flag__info" aria-live="polite">
+      {copy.stages.map((stage, index) => (
+        <article data-step-text={index} hidden={index !== 0}>
+          <h4>{stage.name}</h4>
+          <p>{stage.text}</p>
+          <p class="flag__spec">
+            <span>{FLAGSHIP_ZH.specLabel}</span>
+            {stage.spec}
+          </p>
+        </article>
+      ))}
+      <button type="button" class="figure__run" data-run>{copy.run}</button>
+    </section>
+
+    <section class="flag__aside">
+      <p class="figure__sub">{copy.pointsLabel}</p>
+      {copy.stages.map((stage, index) => (
+        <ol class="flag__points" data-step-points={index} hidden={index !== 0}>
+          {stage.points.map((point) => <li>{point}</li>)}
+        </ol>
+      ))}
+    </section>
+  </div>
+
+  <p class="figure__note">
+    {copy.schedule}
+    <span class="flag__spec flag__spec--inline">{copy.scheduleSpec}</span>
+  </p>
+</div>
+
+<script>
+  const STOP_MS = 1500;
+
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-report]')) {
+    const stopsData: unknown = JSON.parse(figure.dataset.stops ?? '[]');
+    const stops = Array.isArray(stopsData) ? stopsData.map(Number) : [];
+    const stations = [...figure.querySelectorAll<SVGGElement>('.fig-station')];
+    const glows = [...figure.querySelectorAll<SVGPathElement>('.fig-glow')];
+    const steps = [...figure.querySelectorAll<HTMLButtonElement>('[data-step]')];
+    const texts = [...figure.querySelectorAll<HTMLElement>('[data-step-text]')];
+    const points = [...figure.querySelectorAll<HTMLElement>('[data-step-points]')];
+    const courier = figure.querySelector<SVGGElement>('[data-courier]');
+    const run = figure.querySelector<HTMLButtonElement>('[data-run]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer = 0;
+
+    const choose = (index: number): void => {
+      for (const station of stations) station.classList.toggle('is-active', Number(station.dataset.station) === index);
+      for (const glow of glows) glow.classList.toggle('is-active', Number(glow.dataset.station) === index);
+      for (const step of steps) step.setAttribute('aria-pressed', String(Number(step.dataset.step) === index));
+      for (const text of texts) text.hidden = Number(text.dataset.stepText) !== index;
+      for (const list of points) list.hidden = Number(list.dataset.stepPoints) !== index;
+      courier?.style.setProperty('--at', String(stops[index] ?? 0));
+      figure.dataset.active = String(index);
+    };
+
+    const stop = (): void => {
+      window.clearInterval(timer);
+      figure.dataset.running = 'false';
+    };
+
+    for (const target of [...stations, ...steps]) {
+      target.addEventListener('click', () => {
+        stop();
+        choose(Number(target.dataset.station ?? target.dataset.step));
+      });
+    }
+
+    // Follow one report down the line, stopping under each station in turn.
+    run?.addEventListener('click', () => {
+      stop();
+      choose(0);
+      if (reducedMotion.matches) return;
+      figure.dataset.running = 'true';
+      let index = 0;
+      timer = window.setInterval(() => {
+        index += 1;
+        if (index >= stops.length) stop();
+        else choose(index);
+      }, STOP_MS);
+    });
+
+    choose(0);
+  }
+</script>

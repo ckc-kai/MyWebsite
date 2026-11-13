@@ -1,0 +1,225 @@
+---
+import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { spreadMarks } from '../../lib/spread';
+import { KEY_ROWS, MAX_TURN, SEMG_FIGURE_SIZE, STATION_SINCE, buildSemgFigure, hotSeat } from './semg-figure';
+import './figure.css';
+import './flagship.css';
+
+const PERCENT = 100;
+const copy = FLAGSHIP_ZH.semg;
+const figure = buildSemgFigure();
+const blocks = KEY_ROWS.join('').length;
+const versions = copy.versions.items.map((item) => {
+  const wrong = Math.round((item.cer * blocks) / PERCENT);
+  return { ...item, wrong, pattern: spreadMarks(blocks, wrong).map((isWrong) => (isWrong ? '1' : '0')).join('') };
+});
+const lastVersion = versions.length - 1;
+const turns = Array.from({ length: MAX_TURN * 2 + 1 }, (_, i) => i - MAX_TURN);
+const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
+---
+
+<div
+  class="flag"
+  data-semg
+  data-stops={JSON.stringify(figure.stops)}
+  data-seats={JSON.stringify(seats)}
+  data-wrong={JSON.stringify(versions.map((version) => version.pattern))}
+  data-home={copy.turn.homeElectrode}
+  data-max-turn={MAX_TURN}
+  data-straight={copy.turn.straight}
+  data-turned={JSON.stringify(copy.turn.turned)}
+  data-running="false"
+  data-no-drag
+  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px`}
+>
+  <header class="figure__label">
+    <h3>{copy.title}</h3>
+    <p>{copy.hint}</p>
+  </header>
+
+  <div class="flag__drawing iso" data-globe-clear>
+    <svg class="iso-svg" viewBox={`0 0 ${SEMG_FIGURE_SIZE.width} ${SEMG_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
+  </div>
+  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+
+  <ol class="flag__stepper">
+    {copy.stations.map((station, index) => (
+      <li>
+        <button type="button" data-step={index} data-since={STATION_SINCE[station.id]} aria-pressed={index === 0 ? 'true' : 'false'}>
+          <b>{index + 1}</b>
+          {station.name}
+        </button>
+      </li>
+    ))}
+  </ol>
+
+  <div class="flag__panels" data-globe-clear>
+    <section class="flag__info" aria-live="polite">
+      {copy.stations.map((station, index) => (
+        <article data-step-text={index} hidden={index !== 0}>
+          <h4>{station.name}</h4>
+          <p>{station.text}</p>
+          <p class="flag__spec">
+            <span>{FLAGSHIP_ZH.specLabel}</span>
+            {station.spec}
+          </p>
+        </article>
+      ))}
+      <div class="flag__try" data-turn-box>
+        <p class="flag__try-label">{copy.turn.label}</p>
+        <div class="figure__links">
+          <button type="button" data-turn="-1">{copy.turn.left}</button>
+          <button type="button" data-turn="0">{copy.turn.reset}</button>
+          <button type="button" data-turn="1">{copy.turn.right}</button>
+        </div>
+        <p class="flag__caption" data-caption>{copy.turn.straight}</p>
+      </div>
+      <button type="button" class="figure__run" data-run>{copy.run}</button>
+    </section>
+
+    <section class="flag__aside">
+      <p class="figure__sub">{copy.versions.label}</p>
+      <ol class="figure__steps figure__steps--row">
+        {versions.map((version, index) => (
+          <li>
+            <button type="button" data-version={index} aria-pressed={index === lastVersion ? 'true' : 'false'}>
+              <b>{Math.round(version.cer)}</b>
+              {version.name}
+            </button>
+          </li>
+        ))}
+      </ol>
+      <div class="flag__version">
+        {versions.map((version, index) => (
+          <p data-version-text={index} hidden={index !== lastVersion}>
+            {version.what}
+            <span class="flag__blocks">
+              {copy.versions.blocks[0]}
+              <b> {version.wrong} </b>
+              {copy.versions.blocks[1]}
+            </span>
+          </p>
+        ))}
+        <p class="flag__absent" data-absent-note hidden>{copy.versions.absent}</p>
+      </div>
+      <p class="flag__takeaway">{copy.versions.takeaway}</p>
+    </section>
+  </div>
+
+  <p class="figure__note">{copy.scope}</p>
+</div>
+
+<script>
+  const STOP_MS = 1500;
+  const ELECTRODES = 16;
+  /** The stations where turning the band shows something: the wrist itself and the round table. */
+  const TURNABLE = new Set([0, 2]);
+
+  const parse = <T,>(text: string | undefined, fallback: T): T => {
+    try {
+      return text ? (JSON.parse(text) as T) : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-semg]')) {
+    const stops = parse<number[]>(figure.dataset.stops, []);
+    const seatAt = parse<Record<string, number>>(figure.dataset.seats, {});
+    const wrong = parse<string[]>(figure.dataset.wrong, []);
+    const turned = parse<string[]>(figure.dataset.turned, []);
+    const home = Number(figure.dataset.home);
+    const maxTurn = Number(figure.dataset.maxTurn);
+
+    const stations = [...figure.querySelectorAll<SVGGElement>('.fig-station')];
+    const glows = [...figure.querySelectorAll<SVGPathElement>('.fig-glow')];
+    const steps = [...figure.querySelectorAll<HTMLButtonElement>('[data-step]')];
+    const texts = [...figure.querySelectorAll<HTMLElement>('[data-step-text]')];
+    const seats = [...figure.querySelectorAll<SVGGElement>('.fig-seat')];
+    const clasps = [...figure.querySelectorAll<SVGGElement>('[data-clasp]')];
+    const blocks = [...figure.querySelectorAll<SVGGElement>('.fig-block')];
+    const dated = [...figure.querySelectorAll<HTMLElement | SVGGElement>('[data-since]')];
+    const versions = [...figure.querySelectorAll<HTMLButtonElement>('[data-version]')];
+    const versionTexts = [...figure.querySelectorAll<HTMLElement>('[data-version-text]')];
+    const parcel = figure.querySelector<SVGGElement>('[data-parcel]');
+    const turnBox = figure.querySelector<HTMLElement>('[data-turn-box]');
+    const caption = figure.querySelector<HTMLElement>('[data-caption]');
+    const absentNote = figure.querySelector<HTMLElement>('[data-absent-note]');
+    const run = figure.querySelector<HTMLButtonElement>('[data-run]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let turn = 0;
+    let timer = 0;
+
+    const choose = (index: number): void => {
+      for (const station of stations) station.classList.toggle('is-active', Number(station.dataset.station) === index);
+      for (const glow of glows) glow.classList.toggle('is-active', Number(glow.dataset.station) === index);
+      for (const step of steps) step.setAttribute('aria-pressed', String(Number(step.dataset.step) === index));
+      for (const text of texts) text.hidden = Number(text.dataset.stepText) !== index;
+      parcel?.style.setProperty('--at', String(stops[index] ?? 0));
+      if (turnBox) turnBox.hidden = !TURNABLE.has(index);
+      figure.dataset.active = String(index);
+    };
+
+    const setTurn = (next: number): void => {
+      turn = Math.max(-maxTurn, Math.min(maxTurn, next));
+      const hot = seatAt[String(turn)] ?? 0;
+      for (const seat of seats) {
+        const away = Math.abs(Number(seat.dataset.seat) - hot);
+        seat.classList.toggle('is-hot', away === 0);
+        seat.classList.toggle('is-near', away === 1 || away === ELECTRODES - 1);
+      }
+      for (const clasp of clasps) clasp.toggleAttribute('hidden', Number(clasp.dataset.clasp) !== turn);
+      const electrode = ((((home - 1 - turn) % ELECTRODES) + ELECTRODES) % ELECTRODES) + 1;
+      if (caption) caption.textContent = turn === 0 ? (figure.dataset.straight ?? '') : `${turned[0]} ${Math.abs(turn)} ${turned[1]} ${electrode} ${turned[2]}`;
+      figure.dataset.turn = String(turn);
+      figure.dataset.overMuscle = String(electrode);
+    };
+
+    const setVersion = (index: number): void => {
+      for (const part of dated) part.classList.toggle('is-absent', Number(part.dataset.since) > index);
+      for (const version of versions) version.setAttribute('aria-pressed', String(Number(version.dataset.version) === index));
+      for (const text of versionTexts) text.hidden = Number(text.dataset.versionText) !== index;
+      const pattern = wrong[index] ?? '';
+      for (const block of blocks) block.classList.toggle('is-wrong', pattern[Number(block.dataset.block)] === '1');
+      if (absentNote) absentNote.hidden = index === versions.length - 1;
+      figure.dataset.version = String(index);
+    };
+
+    const stop = (): void => {
+      window.clearInterval(timer);
+      figure.dataset.running = 'false';
+    };
+
+    for (const target of [...stations, ...steps]) {
+      target.addEventListener('click', () => {
+        stop();
+        choose(Number(target.dataset.station ?? target.dataset.step));
+      });
+    }
+    for (const button of figure.querySelectorAll<HTMLButtonElement>('[data-turn]')) {
+      button.addEventListener('click', () => {
+        const by = Number(button.dataset.turn);
+        setTurn(by === 0 ? 0 : turn + by);
+      });
+    }
+    for (const version of versions) version.addEventListener('click', () => setVersion(Number(version.dataset.version)));
+
+    // Follow one stretch of signal down the line, stopping beside each machine in turn.
+    run?.addEventListener('click', () => {
+      stop();
+      choose(0);
+      if (reducedMotion.matches) return;
+      figure.dataset.running = 'true';
+      let index = 0;
+      timer = window.setInterval(() => {
+        index += 1;
+        if (index >= stops.length) stop();
+        else choose(index);
+      }, STOP_MS);
+    });
+
+    choose(0);
+    setTurn(0);
+    setVersion(versions.length - 1);
+  }
+</script>

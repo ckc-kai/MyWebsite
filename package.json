@@ -1,0 +1,32 @@
+{
+  "name": "kaicheng-chu-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "build:dots": "vite-node scripts/build-land-dots.ts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/long-cang": "^5.2.5",
+    "@fontsource/noto-serif-sc": "^5.2.5",
+    "@fontsource/source-sans-3": "^5.2.5",
+    "@fontsource/source-serif-4": "^5.2.5",
+    "astro": "^5.18.2",
+    "d3-geo": "^3.1.1",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@types/d3-geo": "^3.1.0",
+    "@types/geojson": "^7946.0.14",
+    "@types/topojson-client": "^3.1.5",
+    "@types/topojson-specification": "^1.0.5",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

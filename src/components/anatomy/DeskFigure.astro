@@ -1,0 +1,214 @@
+---
+import { FLAGSHIP_ZH } from '../../content/flagship-zh';
+import { DESK_FIGURE_SIZE, buildDeskFigure } from './desk-figure';
+import { DESK_PATHS, WORKERS } from './desk-paths';
+import './figure.css';
+import './flagship.css';
+
+const copy = FLAGSHIP_ZH.desk;
+const figure = buildDeskFigure();
+const stationOf = Object.fromEntries(copy.stations.map((station) => [station.id, station]));
+const firstQuestion = copy.follow.questions[0].id;
+const FIRST_STATION = 'pdf';
+---
+
+<div class="flag flag--desk" data-desk data-rests={JSON.stringify(figure.rests)} data-no-drag>
+  <header class="figure__label">
+    <h3>{copy.title}</h3>
+    <p>{copy.hint}</p>
+  </header>
+
+  <div class="flag__drawing iso" data-globe-clear>
+    <svg class="iso-svg" viewBox={`0 0 ${DESK_FIGURE_SIZE.width} ${DESK_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
+  </div>
+  <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+
+  <div class="flag__who" role="group" aria-label={copy.who.label}>
+    <span>{copy.who.label}</span>
+    <button type="button" data-who-pick="" aria-pressed="true">{copy.who.all}</button>
+    {WORKERS.map((worker) => (
+      <button type="button" data-who-pick={worker} aria-pressed="false">
+        <i data-worker={worker} />
+        {copy.who.names[worker]}
+      </button>
+    ))}
+  </div>
+
+  <div class="flag__groups">
+    {copy.groups.map((group) => (
+      <div class="flag__group">
+        <span>{group.name}</span>
+        <ol class="flag__stepper">
+          {group.ids.map((id) => (
+            <li>
+              <button type="button" data-step={id} data-who={stationOf[id].who.join(' ')} aria-pressed={id === FIRST_STATION ? 'true' : 'false'}>
+                {stationOf[id].name}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+  </div>
+
+  <div class="flag__panels" data-globe-clear>
+    <section class="flag__info" aria-live="polite">
+      {copy.stations.map((station) => (
+        <article data-step-text={station.id} hidden={station.id !== FIRST_STATION}>
+          <h4>
+            {station.name}
+            <span class="flag__by">
+              {station.who.map((worker) => (
+                <span>
+                  <i data-worker={worker} />
+                  {copy.who.names[worker]}
+                </span>
+              ))}
+            </span>
+          </h4>
+          <p>{station.text}</p>
+          {station.spec && (
+            <p class="flag__spec">
+              <span>{FLAGSHIP_ZH.specLabel}</span>
+              {station.spec}
+            </p>
+          )}
+        </article>
+      ))}
+    </section>
+
+    <section class="flag__aside">
+      <p class="figure__sub">{copy.follow.label}</p>
+      <div class="figure__pick flag__pick" role="group" aria-label={copy.follow.label}>
+        {copy.follow.questions.map((question) => (
+          <button type="button" data-question={question.id} aria-pressed={question.id === firstQuestion ? 'true' : 'false'}>
+            <b>{question.tag}</b>
+            {question.text}
+          </button>
+        ))}
+      </div>
+      <p class="figure__idle" data-idle>{copy.follow.idle}</p>
+      {copy.follow.questions.map((question) => (
+        <ol class="figure__log flag__log" data-log={question.id} hidden={question.id !== firstQuestion}>
+          {question.steps.map((text, index) => {
+            const step = DESK_PATHS[question.id][index];
+            const judged = step.node === 'verify' || step.node === 'gates';
+            return (
+              <li data-node-at={step.node} data-failed={step.failed ? 'true' : 'false'} hidden>
+                <b>{stationOf[step.node].name}</b>
+                <span>
+                  {text}
+                  {judged && <em>{step.failed ? copy.follow.failed : copy.follow.passed}</em>}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      ))}
+      <div class="figure__links">
+        <button type="button" data-next>{copy.follow.next}</button>
+        <button type="button" data-replay>{copy.follow.replay}</button>
+      </div>
+    </section>
+  </div>
+
+  <p class="figure__note">{copy.note}</p>
+</div>
+
+<script>
+  const STEP_MS = 1500;
+  const HOME = 'ask';
+
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-desk]')) {
+    const restsData: unknown = JSON.parse(figure.dataset.rests ?? '{}');
+    const rests = (typeof restsData === 'object' && restsData !== null ? restsData : {}) as Record<string, [number, number] | undefined>;
+    const nodes = [...figure.querySelectorAll<SVGGElement>('[data-node]')];
+    const steps = [...figure.querySelectorAll<HTMLButtonElement>('[data-step]')];
+    const texts = [...figure.querySelectorAll<HTMLElement>('[data-step-text]')];
+    const whoPicks = [...figure.querySelectorAll<HTMLButtonElement>('[data-who-pick]')];
+    const questions = [...figure.querySelectorAll<HTMLButtonElement>('[data-question]')];
+    const logs = [...figure.querySelectorAll<HTMLElement>('[data-log]')];
+    const token = figure.querySelector<SVGGElement>('[data-token]');
+    const idle = figure.querySelector<HTMLElement>('[data-idle]');
+    const next = figure.querySelector<HTMLButtonElement>('[data-next]');
+    const replay = figure.querySelector<HTMLButtonElement>('[data-replay]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let shown = 0;
+    let timer = 0;
+
+    /** Show what one station does, whether it was clicked or the question has just arrived there. */
+    const choose = (id: string): void => {
+      for (const node of nodes) node.classList.toggle('is-active', node.dataset.node === id);
+      for (const step of steps) step.setAttribute('aria-pressed', String(step.dataset.step === id));
+      for (const text of texts) text.hidden = text.dataset.stepText !== id;
+      figure.dataset.active = id;
+    };
+
+    const filterBy = (worker: string): void => {
+      for (const pick of whoPicks) pick.setAttribute('aria-pressed', String(pick.dataset.whoPick === worker));
+      const dim = (who: string | undefined): boolean => worker !== '' && !(who ?? '').split(' ').includes(worker);
+      for (const node of nodes) node.classList.toggle('is-dim', dim(node.dataset.who));
+      for (const step of steps) step.classList.toggle('is-dim', dim(step.dataset.who));
+      figure.dataset.who = worker;
+    };
+
+    const log = (): HTMLElement[] => [...(logs.find((list) => !list.hidden)?.querySelectorAll<HTMLElement>('li') ?? [])];
+
+    const follow = (): void => {
+      const all = log();
+      all.forEach((step, index) => {
+        step.hidden = index >= shown;
+        step.classList.toggle('is-current', index === shown - 1);
+      });
+      const current = shown > 0 ? all[shown - 1] : undefined;
+      const at = current?.dataset.nodeAt ?? HOME;
+      const visited = new Set(all.slice(0, shown).map((step) => step.dataset.nodeAt));
+      for (const node of nodes) {
+        node.classList.toggle('is-visited', visited.has(node.dataset.node));
+        node.classList.toggle('is-failed', node.dataset.node === at && current?.dataset.failed === 'true');
+      }
+      const [x, y] = rests[at] ?? [0, 0];
+      if (token) token.style.transform = `translate(${x}px, ${y}px)`;
+      if (next) next.disabled = shown >= all.length;
+      if (idle) idle.hidden = shown > 0;
+      figure.dataset.at = at;
+      if (shown > 0) choose(at);
+    };
+
+    const stop = (): void => window.clearInterval(timer);
+    const advance = (): void => {
+      if (shown < log().length) shown += 1;
+      if (shown >= log().length) stop();
+      follow();
+    };
+    const play = (): void => {
+      stop();
+      shown = reducedMotion.matches ? log().length : 0;
+      follow();
+      if (!reducedMotion.matches) timer = window.setInterval(advance, STEP_MS);
+    };
+
+    for (const target of [...nodes, ...steps]) {
+      target.addEventListener('click', () => {
+        stop();
+        choose(target.dataset.node ?? target.dataset.step ?? HOME);
+      });
+    }
+    for (const pick of whoPicks) pick.addEventListener('click', () => filterBy(pick.dataset.whoPick ?? ''));
+    for (const question of questions) {
+      question.addEventListener('click', () => {
+        for (const other of questions) other.setAttribute('aria-pressed', String(other === question));
+        for (const list of logs) list.hidden = list.dataset.log !== question.dataset.question;
+        play();
+      });
+    }
+    next?.addEventListener('click', () => {
+      stop();
+      advance();
+    });
+    replay?.addEventListener('click', play);
+
+    // Nothing moves until the reader asks: the first question sits ready at the hopper.
+    follow();
+  }
+</script>

@@ -1,0 +1,51 @@
+---
+import '@fontsource/source-serif-4/400-italic.css';
+import '@fontsource/source-serif-4/700-italic.css';
+import '@fontsource/source-serif-4/700.css';
+import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/600.css';
+import '@fontsource/noto-serif-sc/900.css';
+import '@fontsource/long-cang/400.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { DAY_START_HOUR, NIGHT_START_HOUR, THEME_STORAGE_KEY } from '../lib/theme';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: string;
+}
+
+const { title, description, lang } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <!-- Runs before first paint so the page never flashes the wrong theme. -->
+    <script is:inline define:vars={{ DAY_START_HOUR, NIGHT_START_HOUR, THEME_STORAGE_KEY }}>
+      (() => {
+        let override = null;
+        try {
+          override = sessionStorage.getItem(THEME_STORAGE_KEY);
+        } catch {
+          // Storage can be blocked (private mode); the clock alone decides then.
+        }
+        // `?theme=night` wins over everything, so either view can be linked to directly.
+        const requested = new URLSearchParams(location.search).get('theme');
+        const hour = new Date().getHours();
+        const byClock = hour >= DAY_START_HOUR && hour < NIGHT_START_HOUR ? 'day' : 'night';
+        const isTheme = (value) => value === 'day' || value === 'night';
+        document.documentElement.dataset.theme = isTheme(requested) ? requested : isTheme(override) ? override : byClock;
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

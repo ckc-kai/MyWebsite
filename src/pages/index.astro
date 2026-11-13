@@ -1,0 +1,15 @@
+---
+import Journey from '../components/journey/Journey.astro';
+import Motto from '../components/site/Motto.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import { SITE_ZH as site } from '../content/zh';
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="zh-CN" title={site.title} description={site.description}>
+  <SiteHeader />
+  <main>
+    <Journey />
+  </main>
+  <Motto />
+</Base>

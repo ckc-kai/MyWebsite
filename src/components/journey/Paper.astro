@@ -1,0 +1,197 @@
+---
+import type { PaperSheet } from '../../content/zh';
+import RichText from '../ui/RichText.astro';
+
+interface Props {
+  paper: PaperSheet;
+}
+
+/** The forest plot's own units: ratios run along x, one row per estimate. */
+const PLOT = { width: 260, rowHeight: 26, left: 6, right: 254, from: 0.9, to: 1.8 };
+const AXIS_TICKS = [1, 1.2, 1.4, 1.6, 1.8];
+
+const { paper } = Astro.props;
+const estimates = paper.estimates ?? [];
+const isLatin = /^[\x20-\x7E]+$/.test(paper.title);
+const xOf = (ratio: number): number => PLOT.left + ((ratio - PLOT.from) / (PLOT.to - PLOT.from)) * (PLOT.right - PLOT.left);
+const plotHeight = estimates.length * PLOT.rowHeight + 22;
+const axisY = estimates.length * PLOT.rowHeight + 4;
+---
+
+<article class="paper" data-no-drag data-globe-clear>
+  <p class="paper__venue">{paper.venue}</p>
+  <h3 lang={isLatin ? 'en' : undefined}>{paper.title}</h3>
+  {paper.subtitle && <p class="paper__subtitle" lang="en">{paper.subtitle}</p>}
+  <p class="paper__byline">{paper.byline}</p>
+  <div class:list={['paper__main', { 'paper__main--plot': estimates.length > 0 }]}>
+  <div class="paper__body">
+    {paper.sections.map((section) => (
+      <p>
+        <b>{section.head}</b>
+        <RichText text={section.text} />
+      </p>
+    ))}
+  </div>
+
+  {estimates.length > 0 && (
+    <figure class="paper__plot">
+      <svg viewBox={`0 0 ${PLOT.width} ${plotHeight}`} role="img" aria-label={paper.estimatesCaption}>
+        <line class="paper__one" x1={xOf(1)} y1="0" x2={xOf(1)} y2={axisY} />
+        <line class="paper__axis" x1={PLOT.left} y1={axisY} x2={PLOT.right} y2={axisY} />
+        {AXIS_TICKS.map((tick) => (
+          <g>
+            <line class="paper__axis" x1={xOf(tick)} y1={axisY} x2={xOf(tick)} y2={axisY + 4} />
+            <text class="paper__tick" x={xOf(tick)} y={axisY + 15}>{tick.toFixed(1)}</text>
+          </g>
+        ))}
+        {estimates.map((estimate, index) => {
+          const y = index * PLOT.rowHeight + 15;
+          return (
+            <g>
+              <text class="paper__label" x={PLOT.left} y={y - 7}>{estimate.label}  {estimate.ratio.toFixed(2)}</text>
+              <line class="paper__interval" x1={xOf(estimate.low)} y1={y} x2={xOf(estimate.high)} y2={y} />
+              <circle class="paper__point" cx={xOf(estimate.ratio)} cy={y} r="4" />
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>{paper.estimatesCaption}</figcaption>
+    </figure>
+  )}
+  </div>
+</article>
+
+<style>
+  /* Research is shown the way research is read: as the first page of a paper. */
+  .paper {
+    width: min(100%, 33rem);
+    padding: 22px 26px 22px;
+    background: var(--color-paper);
+    color: var(--color-paper-ink);
+    box-shadow: 0 20px 40px -26px rgb(0 0 0 / 0.55);
+  }
+
+  .paper__venue {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--color-paper-soft);
+  }
+
+  h3 {
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 900;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  /* A Latin title is set a little smaller: it runs longer than a Chinese one. */
+  h3:lang(en) {
+    font-size: 1.1875rem;
+    font-weight: 700;
+  }
+
+  .paper__subtitle {
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .paper__byline {
+    margin-top: 10px;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-paper-soft);
+  }
+
+  .paper__main {
+    margin-top: 12px;
+  }
+
+  /* With a plot, the abstract runs beside it, the way a figure sits in a column. */
+  .paper__main--plot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12.5rem;
+    gap: 6px 22px;
+    align-items: start;
+  }
+
+  /* Justified, with run-in heads, like an abstract. */
+  .paper__body {
+    display: grid;
+    gap: 5px;
+    font-size: 0.9375rem;
+    line-height: 1.68;
+    text-align: justify;
+  }
+
+  .paper__body b {
+    margin-right: 0.7em;
+    font-family: var(--font-display);
+  }
+
+  .paper__plot {
+    margin: 4px 0 0;
+  }
+
+  @media (max-width: 560px) {
+    .paper__main--plot {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .paper__plot svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .paper__one {
+    stroke: var(--color-paper-soft);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .paper__axis {
+    stroke: var(--color-paper-ink);
+    stroke-width: 1;
+  }
+
+  .paper__interval {
+    stroke: var(--color-paper-ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .paper__point {
+    fill: var(--color-study);
+  }
+
+  .paper__tick,
+  .paper__label {
+    fill: var(--color-paper-soft);
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .paper__tick {
+    text-anchor: middle;
+  }
+
+  .paper__label {
+    fill: var(--color-paper-ink);
+    font-size: 11px;
+  }
+
+  .paper__plot figcaption {
+    margin-top: 6px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-paper-soft);
+  }
+</style>

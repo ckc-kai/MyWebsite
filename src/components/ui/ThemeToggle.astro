@@ -1,0 +1,96 @@
+---
+interface Props {
+  groupLabel: string;
+  dayLabel: string;
+  nightLabel: string;
+}
+
+const { groupLabel, dayLabel, nightLabel } = Astro.props;
+---
+
+<div class="theme-toggle" role="group" aria-label={groupLabel} data-theme-toggle>
+  <button type="button" data-set-theme="day" aria-label={dayLabel} title={dayLabel}>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle class="theme-toggle__body" cx="12" cy="12" r="4.4"></circle>
+      <path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6M5.4 5.4l1.8 1.8M16.8 16.8l1.8 1.8M5.4 18.6l1.8-1.8M16.8 7.2l1.8-1.8"></path>
+    </svg>
+  </button>
+  <button type="button" data-set-theme="night" aria-label={nightLabel} title={nightLabel}>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path class="theme-toggle__body" d="M19.2 14.6A8 8 0 0 1 9.4 4.8a7.4 7.4 0 1 0 9.8 9.8Z"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  import { THEME_STORAGE_KEY, isTheme } from '../../lib/theme';
+
+  const root = document.documentElement;
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-set-theme]')];
+
+  const reflect = (): void => {
+    for (const button of buttons) {
+      button.setAttribute('aria-pressed', String(button.dataset.setTheme === root.dataset.theme));
+    }
+  };
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      const theme = button.dataset.setTheme;
+      if (!isTheme(theme)) return;
+      root.dataset.theme = theme;
+      try {
+        // Session only: tomorrow the clock decides again.
+        sessionStorage.setItem(THEME_STORAGE_KEY, theme);
+      } catch {
+        // Storage can be blocked; the choice still applies to this page view.
+      }
+      reflect();
+    });
+  }
+  reflect();
+</script>
+
+<style>
+  /* A sun and a moon, drawn with the site's pen. The one in force is filled in. */
+  .theme-toggle {
+    display: inline-flex;
+    gap: 2px;
+  }
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink-faint);
+    cursor: pointer;
+    transition: color var(--duration-fast) ease;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .theme-toggle__body {
+    transition: fill var(--duration-normal) ease;
+  }
+
+  button:hover,
+  button[aria-pressed='true'] {
+    color: var(--color-ink);
+  }
+
+  button[aria-pressed='true'] .theme-toggle__body {
+    fill: var(--color-marker);
+  }
+</style>

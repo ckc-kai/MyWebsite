@@ -1,0 +1,11 @@
+---
+import type { Rich } from '../../content/zh';
+
+interface Props {
+  text: Rich;
+}
+
+const { text } = Astro.props;
+---
+
+{text.map((part) => (typeof part === 'string' ? part : <b>{part.b}</b>))}

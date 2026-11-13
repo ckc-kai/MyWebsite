@@ -1,0 +1,51 @@
+---
+import { OPENING_ZH as copy } from '../../content/zh';
+import RichText from '../ui/RichText.astro';
+import './opening.css';
+---
+
+<section class="opening" id="top" data-stop="top" aria-labelledby="opening-headline">
+  <div class="opening__copy" data-no-drag>
+    <h1 id="opening-headline" data-globe-clear>
+      {copy.headline.before}<mark>{copy.headline.decided}</mark><br /><span class="opening__then"
+        >{copy.headline.then}<mark class="opening__built">{copy.headline.built}</mark></span
+      >
+    </h1>
+    <p class="opening__deck" data-globe-clear>{copy.deck}</p>
+  </div>
+
+  <section class="opening__work" data-no-drag data-globe-clear aria-labelledby="opening-work">
+    <h2 id="opening-work">{copy.workTitle}</h2>
+    <ol>
+      {copy.work.map((item) => (
+        <li data-kind={item.kind}>
+          <p class="opening__when">
+            <b>{item.year}</b>
+            <span>{item.who}</span>
+          </p>
+          <div>
+            <h3><a href={item.href}>{item.what}</a></h3>
+            <p class="opening__how"><RichText text={item.how} /></p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <div class="opening__actions" data-no-drag data-globe-clear>
+    <a class="opening__depart" href="#hangzhou">
+      <span>{copy.depart}</span>
+      <svg viewBox="0 0 64 28" aria-hidden="true">
+        <path d="M3 15 C 18 9, 38 9, 58 14"></path>
+        <path d="M48 6 L 59 14 L 47 21"></path>
+      </svg>
+    </a>
+    <a class="opening__glance" aria-disabled="true">{copy.glance}</a>
+  </div>
+
+  <p class="opening__legend">
+    <span><i class="opening__key opening__key--study"></i>{copy.legendStudy}</span>
+    <span><i class="opening__key opening__key--work"></i>{copy.legendWork}</span>
+    <span class="opening__hint">{copy.legendHint}</span>
+  </p>
+</section>

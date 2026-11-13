@@ -1,0 +1,127 @@
+---
+import type { ContactKind } from '../../content/zh';
+
+interface Props {
+  title: string;
+  contacts: ReadonlyArray<{ kind: ContactKind; label: string; value: string; href?: string }>;
+}
+
+const { title, contacts } = Astro.props;
+---
+
+<aside class="contact" aria-labelledby="contact-title">
+  <h3 id="contact-title">{title}</h3>
+  <ul>
+    {contacts.map((contact) => {
+      const Tag = contact.href ? 'a' : 'span';
+      const external = contact.href?.startsWith('http');
+      return (
+        <li>
+          <Tag
+            class="contact__item"
+            href={contact.href}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
+            aria-disabled={contact.href ? undefined : 'true'}
+          >
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              {contact.kind === 'mail' && (
+                <>
+                  <rect class="contact__tint" x="6" y="11" width="36" height="26" rx="4" />
+                  <path d="M6 15 L24 28 L42 15" />
+                </>
+              )}
+              {contact.kind === 'linkedin' && (
+                <>
+                  <rect class="contact__tint" x="7" y="7" width="34" height="34" rx="6" />
+                  <path d="M16 21 V33 M23 33 V21 M23 26 C 23 20, 33 20, 33 26 V33" />
+                  <circle class="contact__dot" cx="16" cy="15.5" r="1.6" />
+                </>
+              )}
+              {contact.kind === 'instagram' && (
+                <>
+                  <rect class="contact__tint" x="7" y="7" width="34" height="34" rx="10" />
+                  <circle cx="24" cy="24" r="8" />
+                  <circle class="contact__dot" cx="33.5" cy="14.5" r="1.6" />
+                </>
+              )}
+            </svg>
+            <span><b>{contact.label}</b>{contact.value}</span>
+          </Tag>
+        </li>
+      );
+    })}
+  </ul>
+</aside>
+
+<style>
+  /* Ways to reach him, drawn with the same pen as the rest: a small block of its own at the end. */
+  .contact {
+    margin-top: 30px;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 26px;
+    margin-top: 12px;
+  }
+
+  .contact__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  svg {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The highlighter fills the mark when the link is about to be used. */
+  .contact__tint {
+    fill: var(--color-marker);
+    fill-opacity: 0;
+    transition: fill-opacity var(--duration-normal) ease;
+  }
+
+  .contact__dot {
+    fill: var(--color-ink);
+    stroke: none;
+  }
+
+  a.contact__item:hover .contact__tint,
+  a.contact__item:focus-visible .contact__tint {
+    fill-opacity: 1;
+  }
+
+  .contact__item span {
+    display: grid;
+    font-size: var(--text-small);
+    line-height: 1.35;
+    color: var(--color-ink-soft);
+  }
+
+  .contact__item b {
+    font-size: 1rem;
+    color: var(--color-ink);
+  }
+
+  .contact__item[aria-disabled='true'] {
+    opacity: 0.55;
+  }
+</style>

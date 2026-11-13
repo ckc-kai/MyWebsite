@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import childCutout from '../../assets/child-cutout.png';
+import { JOURNEY_ZH as journey, OPENING_ZH as opening, SITE_ZH as site } from '../../content/zh';
+import Globe from '../globe/Globe.astro';
+import Opening from '../opening/Opening.astro';
+import Station from './Station.astro';
+import './journey.css';
+---
+
+<div class="journey" data-globe-stage data-active="top">
+  <div class="journey__stage">
+    <Globe lang="zh" label={site.globeLabel} />
+    <div class="journey__anchor" data-globe-anchor aria-hidden="true"></div>
+
+    <!-- Pinned to Hangzhou on the globe: he stands where the story starts, and turns with it. -->
+    <figure class="kid" data-globe-pin="HZ">
+      <Image class="kid__photo" src={childCutout} alt={opening.kidAlt} height={420} densities={[1, 2]} loading="eager" />
+      <figcaption class="kid__note">{opening.kidNote}</figcaption>
+    </figure>
+  </div>
+
+  <Opening />
+  {journey.stations.map((station, index) => <Station station={station} index={index} />)}
+</div>
+
+<script>
+  import { observeJourney } from './observe';
+
+  for (const stage of document.querySelectorAll<HTMLElement>('.journey')) {
+    observeJourney(stage);
+  }
+</script>

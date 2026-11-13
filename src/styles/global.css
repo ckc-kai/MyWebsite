@@ -1,0 +1,88 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  font-synthesis: none;
+  scroll-behavior: smooth;
+  /* Keeps a stop's first line clear of the fixed header when it is jumped to. */
+  scroll-padding-top: 0;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color var(--duration-normal) ease,
+    color var(--duration-normal) ease;
+}
+
+h1,
+h2,
+h3,
+p,
+dl,
+figure,
+ul,
+table {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-marker);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-study);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 820px) {
+  body {
+    /* Room for the motto strip fixed to the bottom edge. */
+    padding-bottom: 34px;
+  }
+}
+
+/* Each stop, and its entry on the rail, writes with one of the four highlighters. */
+[data-mark='0'] { --mark: var(--mark-0); --mark-alt: var(--mark-2); }
+[data-mark='1'] { --mark: var(--mark-1); --mark-alt: var(--mark-3); }
+[data-mark='2'] { --mark: var(--mark-2); --mark-alt: var(--mark-0); }
+[data-mark='3'] { --mark: var(--mark-3); --mark-alt: var(--mark-1); }

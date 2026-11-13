@@ -1,0 +1,120 @@
+:root {
+  --font-display: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', serif;
+  --font-text: 'Source Sans 3', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --font-hand: 'Long Cang', 'Kaiti SC', cursive;
+
+  --text-small: 0.875rem;
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-headline: clamp(1.5rem, 8.2vw, 3.25rem);
+
+  --gutter: clamp(1.25rem, 5.5vw, 5rem);
+  --header-height: 64px;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Day: the annotated-explainer look. */
+:root,
+:root[data-theme='day'] {
+  color-scheme: light;
+  --color-bg: #ffffff;
+  --color-ink: #161616;
+  --color-ink-soft: #4a4a46;
+  --color-ink-faint: #6f6f69;
+  --color-hair: #cfcfc9;
+  --color-marker: #ffe600;
+  --color-marker-build: #ffb58c;
+  /* Four highlighters, light enough that the ink over them stays black. */
+  --mark-0: #ffe600;
+  --mark-1: #b3dbff;
+  --mark-2: #bcedc7;
+  --mark-3: #ffc4a3;
+  --color-paper: #fbfaf6;
+  --color-paper-ink: #161616;
+  --color-paper-soft: #5c5c56;
+  /* The stroke sits under the letters' lower half, never across their middle. */
+  --marker-top: 58%;
+  --color-study: #1f5fbf;
+  --color-work: #db4f1b;
+  --color-fail: #c2303a;
+
+  --color-print-border: #ffffff;
+
+  --iso-top: #ffffff;
+  --iso-shade-0: #dedfdb;
+  --iso-shade-1: #e7e8e4;
+  --iso-shade-2: #eff0ec;
+  --iso-shade-3: #f6f6f3;
+  --iso-hi: #26262a;
+  --iso-mid: #86868b;
+  --iso-lo: #b0b0b5;
+  --iso-faint: #d6d6d8;
+  --iso-halo: #6f6f66;
+  --iso-halo-opacity: 0.3;
+  --iso-work-shade: #c9481a;
+  --iso-work-edge: #8f2f0d;
+
+  --globe-sphere: #f3f6f8;
+  --globe-sphere-edge: #eaf0f3;
+  --globe-graticule: #ffffff;
+  --globe-land: #dedad1;
+  --globe-land-mode: fill;
+  --globe-station: #161616;
+  --globe-station-ring: #ffffff;
+}
+
+/* Night: the view from a red-eye window. Land becomes points of light. */
+:root[data-theme='night'] {
+  color-scheme: dark;
+  --color-bg: #070b15;
+  --color-ink: #f1ede4;
+  --color-ink-soft: #c5c9d3;
+  --color-ink-faint: #959cad;
+  --color-hair: #2c3549;
+  --color-marker: #d9a14e;
+  --color-marker-build: #e58a4f;
+  --mark-0: #d9a14e;
+  --mark-1: #6fa8e8;
+  --mark-2: #5fbf86;
+  --mark-3: #e58a4f;
+  /* At night a sheet of paper is a darker patch of the same sky, not a lit page. */
+  --color-paper: #111a2e;
+  --color-paper-ink: #f1ede4;
+  --color-paper-soft: #a3abbc;
+  --marker-top: 82%;
+  --color-study: #86b6ff;
+  --color-work: #ffb067;
+  --color-fail: #ff7a7a;
+
+  --color-print-border: #f1ede4;
+
+  --iso-top: #18223a;
+  --iso-shade-0: #0b1120;
+  --iso-shade-1: #0e1527;
+  --iso-shade-2: #111a2e;
+  --iso-shade-3: #141e35;
+  --iso-hi: #e2ded3;
+  --iso-mid: #8b93a5;
+  --iso-lo: #566078;
+  --iso-faint: #2f3950;
+  --iso-halo: #000000;
+  --iso-halo-opacity: 0.7;
+  --iso-work-shade: #d48a4b;
+  --iso-work-edge: #ffd9b3;
+
+  --globe-sphere: #16223d;
+  --globe-sphere-edge: #0a1020;
+  --globe-graticule: transparent;
+  --globe-land: #f2b866;
+  --globe-land-mode: dots;
+  --globe-station: #ffe2b0;
+  --globe-station-ring: #070b15;
+}
+
+@media (max-width: 820px) {
+  :root {
+    /* Two rows on a phone: name and tools, then the strip of stops. */
+    --header-height: 88px;
+  }
+}
