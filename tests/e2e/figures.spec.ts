@@ -17,6 +17,25 @@ test.describe('the flagship figures', () => {
     expect(errors).toEqual([]);
   });
 
+  test('each drawing and the explanation of its chosen station are on screen together', async ({ page }) => {
+    for (const [stop, selector] of [['chengdu', '[data-report]'], ['semg', '[data-semg]'], ['sdge', '[data-desk]']] as const) {
+      await page.locator(`#${stop}`).evaluate((section) => section.scrollIntoView({ behavior: 'instant', block: 'start' }));
+      const figure = page.locator(selector);
+      await expect(figure.locator('.flag__drawing svg'), stop).toBeInViewport({ ratio: 0.95 });
+      await expect(figure.locator('[data-step-text]:visible h4'), stop).toBeInViewport();
+      await expect(figure.locator('.flag__stepper').first(), stop).toBeInViewport();
+    }
+  });
+
+  test('SDG&E states its before and after in figures, with the reading note under the drawing', async ({ page }) => {
+    await expect(page.locator('#sdge .station__result')).toContainText('11.7%');
+    await expect(page.locator('#sdge .station__result')).toContainText('75.0%');
+    const figure = page.locator('[data-desk]');
+    const drawing = await figure.locator('.flag__drawing').boundingBox();
+    const hint = await figure.locator('.flag__hint').boundingBox();
+    expect(hint!.y).toBeGreaterThan(drawing!.y + drawing!.height - 1);
+  });
+
   test('the globe steps back while a machine has the floor', async ({ page }) => {
     await page.locator('#chengdu').evaluate((section) => section.scrollIntoView({ behavior: 'instant' }));
     await expect(page.locator('.journey')).toHaveAttribute('data-quiet', 'true');
@@ -135,5 +154,74 @@ test.describe('the flagship figures', () => {
     await page.goto('/?theme=day');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
+  });
+});
+
+/** Laptop and desktop screens as a browser actually leaves them: a 13-inch MacBook, a 1366×768 laptop, a 1080p monitor. */
+const SCREENS = [
+  { width: 1440, height: 778 },
+  { width: 1280, height: 720 },
+  { width: 1920, height: 960 },
+] as const;
+
+for (const screen of SCREENS) {
+  test.describe(`one machine, one screen at ${screen.width}×${screen.height}`, () => {
+    test.use({ viewport: screen });
+
+    test('each machine stop shows its heading, drawing, stations and explanation without scrolling', async ({ page }) => {
+      await page.goto('/?theme=day');
+      for (const stop of ['chengdu', 'semg', 'sdge']) {
+        await page.locator(`#${stop}`).evaluate((section) => section.scrollIntoView({ behavior: 'instant', block: 'start' }));
+        const fit = await page.locator(`#${stop}`).evaluate((section) => {
+          const bottom = (selector: string) => section.querySelector(selector)!.getBoundingClientRect().bottom;
+          const side = section.querySelector<HTMLElement>('.flag__side')!;
+          const main = section.querySelector('.flag__main')!;
+          const lastInMain = Math.max(...[...main.children].map((child) => child.getBoundingClientRect().bottom));
+          return {
+            heading: section.querySelector('.station__copy')!.getBoundingClientRect().top,
+            mainEnd: lastInMain,
+            sideEnd: bottom('.flag__side'),
+            sideSpill: side.scrollHeight - side.clientHeight,
+            drawingHeight: section.querySelector('.flag__drawing svg')!.getBoundingClientRect().height,
+            screen: innerHeight,
+          };
+        });
+        expect(fit.heading, stop).toBeGreaterThanOrEqual(0);
+        expect(fit.mainEnd, stop).toBeLessThanOrEqual(fit.screen);
+        expect(fit.sideEnd, stop).toBeLessThanOrEqual(fit.screen);
+        expect(fit.sideSpill, stop).toBeLessThanOrEqual(0);
+        expect(fit.drawingHeight, stop).toBeGreaterThan(140);
+      }
+    });
+
+    test('the opening, down to its legend and the way in, fits the first screen', async ({ page }) => {
+      await page.goto('/?theme=day');
+      for (const selector of ['.opening__work', '.opening__actions', '.opening__legend']) {
+        const box = await page.locator(selector).boundingBox();
+        expect(box!.y + box!.height, selector).toBeLessThanOrEqual(screen.height);
+      }
+    });
+  });
+}
+
+test.describe('captions under the drawings', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/?theme=day');
+  });
+
+  test('the data source and the schedule sit straight under their drawings, small', async ({ page }) => {
+    for (const [selector, text] of [['[data-semg]', 'emg2qwerty'], ['[data-report]', 'crontab']] as const) {
+      const figure = page.locator(selector);
+      const drawing = await figure.locator('.flag__drawing').boundingBox();
+      const caption = figure.locator('.flag__figcaption');
+      await expect(caption).toContainText(text);
+      const box = await caption.boundingBox();
+      expect(box!.y - (drawing!.y + drawing!.height), selector).toBeLessThan(24);
+      expect(await caption.evaluate((node) => parseFloat(getComputedStyle(node).fontSize))).toBeLessThanOrEqual(13);
+    }
+  });
+
+  test('SDG&E no longer carries the note about example data', async ({ page }) => {
+    await expect(page.locator('[data-desk]')).not.toContainText('示例问题和其中的编号只是示意');
   });
 });

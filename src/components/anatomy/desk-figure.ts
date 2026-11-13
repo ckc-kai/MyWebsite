@@ -78,7 +78,7 @@ const P = k.fitProjection(
   [...k.boxCorners(PLATE, -PLATE_H - FOOT_H, 0), [STORE.x, STORE.y, STORE_H + 6], [252, -24, 58]],
   DESK_FIGURE_SIZE.width,
   DESK_FIGURE_SIZE.height,
-  { pad: 26, azimuth: 55 },
+  { pad: 14, azimuth: 55 },
 );
 const draw = createDraw(P);
 const { at, L, D, slab, post, collar } = draw;

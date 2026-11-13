@@ -1,0 +1,30 @@
+---
+/**
+ * 最忆是杭州: five West Lake views in ink, laid out like an album leaf under the Hangzhou stop.
+ * The sketches are drawn at build time (scenes.ts); each is named in the hand, and its note is there
+ * for screen readers.
+ */
+import { drawWestLake, type WestLakeKey } from './scenes';
+import './west-lake.css';
+
+interface Props {
+  sketches: ReadonlyArray<{ readonly key: WestLakeKey; readonly name: string; readonly note: string }>;
+  label: string;
+}
+
+const { sketches, label } = Astro.props;
+---
+
+<ul class="west-lake" aria-label={label} data-globe-clear>
+  {sketches.map((sketch) => (
+    <li>
+      <figure>
+        <Fragment set:html={drawWestLake(sketch.key)} />
+        <figcaption>
+          <b>{sketch.name}</b>
+          <span class="west-lake__note">{sketch.note}</span>
+        </figcaption>
+      </figure>
+    </li>
+  ))}
+</ul>

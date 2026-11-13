@@ -30,11 +30,15 @@
   --mark-1: #b3dbff;
   --mark-2: #bcedc7;
   --mark-3: #ffc4a3;
+  /* Selected text: a blue pen by day, so it never reads as one of the page's own yellow marks. */
+  --ink-select: #9fcdff;
   --color-paper: #fbfaf6;
   --color-paper-ink: #161616;
   --color-paper-soft: #5c5c56;
   /* The stroke sits under the letters' lower half, never across their middle. */
   --marker-top: 58%;
+  /* How much of the pen's colour shows. By day the ink is dark, so the pen can be at full strength. */
+  --marker-strength: 100%;
   --color-study: #1f5fbf;
   --color-work: #db4f1b;
   --color-fail: #c2303a;
@@ -59,6 +63,7 @@
   --globe-sphere-edge: #eaf0f3;
   --globe-graticule: #ffffff;
   --globe-land: #dedad1;
+  --globe-border: #c3bbab;
   --globe-land-mode: fill;
   --globe-station: #161616;
   --globe-station-ring: #ffffff;
@@ -78,11 +83,14 @@
   --mark-1: #6fa8e8;
   --mark-2: #5fbf86;
   --mark-3: #e58a4f;
+  --ink-select: #f0a04b;
   /* At night a sheet of paper is a darker patch of the same sky, not a lit page. */
   --color-paper: #111a2e;
   --color-paper-ink: #f1ede4;
   --color-paper-soft: #a3abbc;
-  --marker-top: 82%;
+  /* The same stroke as by day, but let through at half strength: a lit band would swallow light letters. */
+  --marker-top: 58%;
+  --marker-strength: 55%;
   --color-study: #86b6ff;
   --color-work: #ffb067;
   --color-fail: #ff7a7a;
@@ -107,6 +115,7 @@
   --globe-sphere-edge: #0a1020;
   --globe-graticule: transparent;
   --globe-land: #f2b866;
+  --globe-border: rgb(242 184 102 / 0.34);
   --globe-land-mode: dots;
   --globe-station: #ffe2b0;
   --globe-station-ring: #070b15;

@@ -12,16 +12,23 @@ const firstQuestion = copy.follow.questions[0].id;
 const FIRST_STATION = 'pdf';
 ---
 
-<div class="flag flag--desk" data-desk data-rests={JSON.stringify(figure.rests)} data-no-drag>
+<div
+  class="flag flag--desk"
+  data-desk
+  data-rests={JSON.stringify(figure.rests)}
+  data-no-drag
+  style={`--flag-aspect: ${DESK_FIGURE_SIZE.width / DESK_FIGURE_SIZE.height}`}
+>
   <header class="figure__label">
     <h3>{copy.title}</h3>
-    <p>{copy.hint}</p>
   </header>
 
+  <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
     <svg class="iso-svg" viewBox={`0 0 ${DESK_FIGURE_SIZE.width} ${DESK_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
   </div>
   <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__hint">{copy.hint}</p>
 
   <div class="flag__who" role="group" aria-label={copy.who.label}>
     <span>{copy.who.label}</span>
@@ -51,7 +58,9 @@ const FIRST_STATION = 'pdf';
     ))}
   </div>
 
-  <div class="flag__panels" data-globe-clear>
+  </div>
+
+  <div class="flag__side" data-globe-clear>
     <section class="flag__info" aria-live="polite">
       {copy.stations.map((station) => (
         <article data-step-text={station.id} hidden={station.id !== FIRST_STATION}>
@@ -83,7 +92,7 @@ const FIRST_STATION = 'pdf';
         {copy.follow.questions.map((question) => (
           <button type="button" data-question={question.id} aria-pressed={question.id === firstQuestion ? 'true' : 'false'}>
             <b>{question.tag}</b>
-            {question.text}
+            <span>{question.text}</span>
           </button>
         ))}
       </div>
@@ -96,10 +105,8 @@ const FIRST_STATION = 'pdf';
             return (
               <li data-node-at={step.node} data-failed={step.failed ? 'true' : 'false'} hidden>
                 <b>{stationOf[step.node].name}</b>
-                <span>
-                  {text}
-                  {judged && <em>{step.failed ? copy.follow.failed : copy.follow.passed}</em>}
-                </span>
+                {judged && <em>{step.failed ? copy.follow.failed : copy.follow.passed}</em>}
+                <span>{text}</span>
               </li>
             );
           })}
@@ -112,7 +119,6 @@ const FIRST_STATION = 'pdf';
     </section>
   </div>
 
-  <p class="figure__note">{copy.note}</p>
 </div>
 
 <script>

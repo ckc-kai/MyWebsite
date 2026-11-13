@@ -30,17 +30,22 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
   data-turned={JSON.stringify(copy.turn.turned)}
   data-running="false"
   data-no-drag
-  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px`}
+  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px; --flag-aspect: ${SEMG_FIGURE_SIZE.width / SEMG_FIGURE_SIZE.height}`}
 >
   <header class="figure__label">
     <h3>{copy.title}</h3>
-    <p>{copy.hint}</p>
   </header>
 
+  <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
     <svg class="iso-svg" viewBox={`0 0 ${SEMG_FIGURE_SIZE.width} ${SEMG_FIGURE_SIZE.height}`} aria-hidden="true" set:html={figure.svg} />
   </div>
   <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__figcaption">{copy.scope}</p>
+  <div class="flag__cue">
+    <p class="flag__hint">{copy.hint}</p>
+    <button type="button" class="figure__run" data-run>{copy.run}</button>
+  </div>
 
   <ol class="flag__stepper">
     {copy.stations.map((station, index) => (
@@ -53,7 +58,9 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
     ))}
   </ol>
 
-  <div class="flag__panels" data-globe-clear>
+  </div>
+
+  <div class="flag__side" data-globe-clear>
     <section class="flag__info" aria-live="polite">
       {copy.stations.map((station, index) => (
         <article data-step-text={index} hidden={index !== 0}>
@@ -74,7 +81,6 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
         </div>
         <p class="flag__caption" data-caption>{copy.turn.straight}</p>
       </div>
-      <button type="button" class="figure__run" data-run>{copy.run}</button>
     </section>
 
     <section class="flag__aside">
@@ -106,7 +112,6 @@ const seats = Object.fromEntries(turns.map((turn) => [turn, hotSeat(turn)]));
     </section>
   </div>
 
-  <p class="figure__note">{copy.scope}</p>
 </div>
 
 <script>

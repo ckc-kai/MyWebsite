@@ -52,7 +52,7 @@ const P = k.fitProjection(
   [...k.boxCorners(PLATE, -PLATE_H - FOOT_H, 0), [ARM[0], ARM[1], ARM_TOP + 6], [STOP_X.backbone, MACHINE_Y - 20, 70]],
   SEMG_FIGURE_SIZE.width,
   SEMG_FIGURE_SIZE.height,
-  { pad: 26, azimuth: AZIMUTH },
+  { pad: 14, azimuth: AZIMUTH },
 );
 const draw = createDraw(P);
 const { at, L, D, slab, post, collar } = draw;

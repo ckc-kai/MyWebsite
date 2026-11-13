@@ -26,15 +26,10 @@
   letter-spacing: 0.005em;
 }
 
-/* A highlighter stroke rather than a filled box: it sits low and stops short of the edges.
-   At night it thins to an underline, since a wide band of light would swallow the letters. */
+/* A highlighter stroke rather than a filled box: it sits low and stops short of the edges. */
 .opening mark {
-  background: linear-gradient(
-    transparent var(--marker-top),
-    var(--mark, var(--color-marker)) var(--marker-top),
-    var(--mark, var(--color-marker)) 93%,
-    transparent 93%
-  );
+  --pen: color-mix(in srgb, var(--mark, var(--color-marker)) var(--marker-strength), transparent);
+  background: linear-gradient(transparent var(--marker-top), var(--pen) var(--marker-top), var(--pen) 93%, transparent 93%);
   color: inherit;
   padding: 0 0.06em;
   margin: 0 -0.06em;
@@ -69,6 +64,7 @@
 }
 
 .opening__work h2 {
+  width: fit-content;
   font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 700;
@@ -121,6 +117,7 @@
 }
 
 .opening__work h3 {
+  width: fit-content;
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.25rem;
@@ -259,6 +256,62 @@
 
 .opening__hint {
   color: var(--color-ink-faint);
+}
+
+/* Beside the globe the whole opening is one screen, on a short laptop screen as on a tall monitor:
+   the headline and the handwritten line scale with the height as well as the width. The recent work
+   keeps its narrow column so it never reaches the photo standing on Hangzhou. */
+@media (min-width: 821px) {
+  .opening h1 {
+    font-size: clamp(1.5rem, min(8.2vw, 5.8svh), 3.25rem);
+  }
+
+  .opening__deck {
+    margin-top: clamp(6px, 1.4svh, 14px);
+    font-size: clamp(1.25rem, min(1.1rem + 0.9vw, 3svh), 1.6875rem);
+  }
+
+  .opening__work {
+    margin-top: clamp(10px, 2.2svh, 28px);
+  }
+
+  .opening__work ol {
+    gap: clamp(8px, 1.5svh, 16px);
+  }
+
+  /* The key to the lines sits in the map's own corner, like the legend of a printed map. */
+  .opening__legend {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 14px;
+    justify-content: flex-end;
+    max-width: 30rem;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@media (min-width: 821px) and (max-height: 760px) {
+  .opening__work h3 {
+    font-size: 1.125rem;
+  }
+
+  .opening__work li:first-child h3 {
+    font-size: 1.3125rem;
+  }
+
+  .opening__when b {
+    font-size: 1.3125rem;
+  }
+
+  .opening__how {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .opening__actions {
+    margin-top: 10px;
+  }
 }
 
 @media (max-width: 820px) {

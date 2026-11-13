@@ -14,18 +14,19 @@ import './opening.css';
     <p class="opening__deck" data-globe-clear>{copy.deck}</p>
   </div>
 
-  <section class="opening__work" data-no-drag data-globe-clear aria-labelledby="opening-work">
-    <h2 id="opening-work">{copy.workTitle}</h2>
+  <section class="opening__work" data-no-drag aria-labelledby="opening-work">
+    <!-- The globe keeps clear of the text itself, not the whole column: the photo on Hangzhou may stand beside a short title. -->
+    <h2 id="opening-work" data-globe-clear>{copy.workTitle}</h2>
     <ol>
       {copy.work.map((item) => (
         <li data-kind={item.kind}>
-          <p class="opening__when">
+          <p class="opening__when" data-globe-clear>
             <b>{item.year}</b>
             <span>{item.who}</span>
           </p>
           <div>
-            <h3><a href={item.href}>{item.what}</a></h3>
-            <p class="opening__how"><RichText text={item.how} /></p>
+            <h3 data-globe-clear><a href={item.href}>{item.what}</a></h3>
+            <p class="opening__how" data-globe-clear><RichText text={item.how} /></p>
           </div>
         </li>
       ))}
@@ -43,7 +44,7 @@ import './opening.css';
     <a class="opening__glance" aria-disabled="true">{copy.glance}</a>
   </div>
 
-  <p class="opening__legend">
+  <p class="opening__legend" data-globe-clear>
     <span><i class="opening__key opening__key--study"></i>{copy.legendStudy}</span>
     <span><i class="opening__key opening__key--work"></i>{copy.legendWork}</span>
     <span class="opening__hint">{copy.legendHint}</span>

@@ -260,12 +260,14 @@ test.describe('the opening', () => {
 
   test('nothing in the copy sits on top of the photo at first paint', async ({ page }) => {
     const photo = await page.locator('[data-globe-pin=HZ] img').boundingBox();
-    for (const selector of ['.opening h1', '.opening__deck', '.opening__work', '.opening__actions']) {
-      const box = await page.locator(selector).boundingBox();
-      const overlaps =
-        photo!.x < box!.x + box!.width && photo!.x + photo!.width > box!.x &&
-        photo!.y < box!.y + box!.height && photo!.y + photo!.height > box!.y;
-      expect(overlaps, selector).toBe(false);
+    // The text itself: the recent-work column may run past a short title, as long as no line touches the photo.
+    for (const selector of ['.opening h1', '.opening__deck', '.opening__work h2', '.opening__work h3', '.opening__how', '.opening__actions']) {
+      for (const box of await page.locator(selector).evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().toJSON()))) {
+        const overlaps =
+          photo!.x < box.x + box.width && photo!.x + photo!.width > box.x &&
+          photo!.y < box.y + box.height && photo!.y + photo!.height > box.y;
+        expect(overlaps, selector).toBe(false);
+      }
     }
   });
 });
@@ -314,12 +316,41 @@ test.describe('the stops', () => {
     await expect(page.locator('.journey')).toHaveAttribute('data-active', id);
   };
 
-  test('El Paso spells out the league and shows both photographs', async ({ page }) => {
+  test('El Paso spells out the league, and its two photographs hang on the map beside El Paso', async ({ page }) => {
     await goTo(page, 'el-paso');
     const stop = page.locator('#el-paso');
     await expect(stop).toContainText('University Interscholastic League');
     await expect(stop).not.toContainText('三个第一次');
-    await expect(stop.getByRole('img')).toHaveCount(2);
+
+    const board = page.locator('[data-prints-for="el-paso"]');
+    await expect(board).toHaveAttribute('data-shown', '');
+    await expect(board.getByRole('img')).toHaveCount(2);
+    await expect(board.getByRole('img').first()).toBeInViewport();
+    // The prints sit to the right of the copy, not crowded into its column.
+    const copy = await stop.locator('.station__copy').boundingBox();
+    const print = await board.getByRole('img').first().boundingBox();
+    expect(print!.x).toBeGreaterThan(copy!.x + copy!.width);
+    await expect(page.locator('[data-prints-for="uva"]')).not.toHaveAttribute('data-shown', '');
+  });
+
+  test('the photographs on the map turn with the globe when it is dragged', async ({ page }) => {
+    await goTo(page, 'uva');
+    const pin = page.locator('[data-prints-for="uva"]');
+    await page.waitForTimeout(1600);
+    const before = await pin.evaluate((element) => element.style.transform);
+    await page.mouse.move(1100, 700);
+    await page.mouse.down();
+    await page.mouse.move(1180, 700, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(() => pin.evaluate((element) => element.style.transform)).not.toBe(before);
+  });
+
+  test('on a phone the photographs stay in the copy, since the globe is only a band', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/?theme=day');
+    await expect(page.locator('#el-paso .station__photos img')).toHaveCount(2);
+    await expect(page.locator('#el-paso .station__photos')).toBeVisible();
+    await expect(page.locator('[data-prints-for="el-paso"]')).toBeHidden();
   });
 
   test('UVA highlights the two honours and lists the courses', async ({ page }) => {
@@ -335,6 +366,18 @@ test.describe('the stops', () => {
       'Charlottesville Travel Planner',
     ]);
     await expect(page.locator('#uva')).not.toContainText('课上做的三样东西');
+  });
+
+  test('at night the highlighter is the same broad stroke as by day, not a thin underline', async ({ page }) => {
+    const stroke = async (theme: string): Promise<string> => {
+      await page.goto(`/?theme=${theme}`);
+      return page.locator('.opening mark').first().evaluate((mark) => getComputedStyle(mark).backgroundImage);
+    };
+    const day = await stroke('day');
+    const night = await stroke('night');
+    expect(day).toContain('58%');
+    expect(night).toContain('58%');
+    expect(night).not.toBe(day);
   });
 
   test('at night a paper is a dark sheet, not a lit page', async ({ page }) => {
@@ -394,4 +437,78 @@ test.describe('the stops', () => {
       await expect(page.locator('#next .station__hobbies')).toContainText(pastime);
     }
   });
+});
+
+test.describe('round 8 copy and photos', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/?theme=day');
+  });
+
+  test('Hangzhou opens with 最忆是杭州', async ({ page }) => {
+    await expect(page.locator('#hangzhou .station__lead')).toHaveText('最忆是杭州');
+  });
+
+  test('Hangzhou shows the five West Lake sketches, all on one screen of a 13-inch laptop', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 778 });
+    await page.locator('#hangzhou').evaluate((section) => section.scrollIntoView({ behavior: 'instant', block: 'start' }));
+    const sketches = page.locator('#hangzhou .west-lake figure');
+    await expect(sketches).toHaveCount(5);
+    await expect(sketches.locator('figcaption b')).toHaveText(['断桥残雪', '三潭印月', '雷峰夕照', '苏堤春晓', '曲院风荷']);
+    for (let i = 0; i < 5; i++) await expect(sketches.nth(i).locator('svg')).toBeInViewport({ ratio: 0.99 });
+    await expect(page.locator('[data-globe-pin=HZ] img')).toBeVisible();
+  });
+
+  test('at night the sketches are drawn in light ink', async ({ page }) => {
+    await page.goto('/?theme=night');
+    const ink = await page.locator('#hangzhou .west-lake').evaluate((list) => getComputedStyle(list).color);
+    const [red, green, blue] = (ink.match(/\d+/g) ?? []).map(Number);
+    expect(Math.min(red, green, blue)).toBeGreaterThan(180);
+  });
+
+  test('Miller keeps its lead on one line and its two facts on a line each', async ({ page }) => {
+    const lead = page.locator('#miller .station__lead');
+    const lineHeight = await lead.evaluate((node) => parseFloat(getComputedStyle(node).lineHeight));
+    expect((await lead.boundingBox())!.height).toBeLessThan(lineHeight * 1.5);
+    const passages = page.locator('#miller .passages p');
+    await expect(passages).toHaveCount(2);
+    await expect(passages.first()).toContainText('Valedictorian');
+    await expect(passages.nth(1)).toContainText('Animal Adventure');
+    for (const index of [0, 1]) {
+      const height = (await passages.nth(index).boundingBox())!.height;
+      const line = await passages.nth(index).evaluate((node) => parseFloat(getComputedStyle(node).lineHeight));
+      expect(height).toBeLessThan(line * 1.5);
+    }
+  });
+
+  test('UVA hangs three prints on the map, the graduation photo among them', async ({ page }) => {
+    await page.locator('#uva').evaluate((section) => section.scrollIntoView({ behavior: 'instant' }));
+    const board = page.locator('[data-prints-for="uva"]');
+    await expect(board).toHaveAttribute('data-shown', '');
+    await expect(board.locator('img')).toHaveCount(3);
+    await expect(board.locator('img[alt*="毕业肩带"]')).toHaveCount(1);
+  });
+});
+
+test.describe('selecting text', () => {
+  for (const theme of ['day', 'night'] as const) {
+    test(`marks the selection with highlighter strokes instead of a flat box (${theme})`, async ({ page }) => {
+      await page.goto(`/?theme=${theme}`);
+      await expect(page.locator('html')).toHaveAttribute('data-ink-select', '');
+      await page.locator('.opening__deck').evaluate((deck) => {
+        const range = document.createRange();
+        range.selectNodeContents(deck);
+        const selection = getSelection()!;
+        selection.removeAllRanges();
+        selection.addRange(range);
+      });
+      await expect.poll(() => page.locator('[data-ink-layer] path').count()).toBeGreaterThan(0);
+      const box = await page.locator('.opening__deck').evaluate((deck) => getComputedStyle(deck, '::selection').backgroundColor);
+      expect(box).toBe('rgba(0, 0, 0, 0)');
+      const ink = await page.locator('[data-ink-layer] path').first().evaluate((path) => getComputedStyle(path).fill);
+      expect(ink).not.toBe('rgb(255, 230, 0)');
+
+      await page.evaluate(() => getSelection()!.removeAllRanges());
+      await expect.poll(() => page.locator('[data-ink-layer] path').count()).toBe(0);
+    });
+  }
 });

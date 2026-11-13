@@ -1,3 +1,4 @@
+import type { WestLakeKey } from '../components/westlake/scenes';
 import type { LegKind } from '../lib/journey';
 
 /**
@@ -89,7 +90,7 @@ export const OPENING_ZH = {
   kidAlt: '小时候的我，站在杭州',
 } as const;
 
-export type PhotoKey = 'tennis' | 'elpaso' | 'uva' | 'grad2' | 'ucla' | 'now' | 'sea' | 'camera' | 'hike';
+export type PhotoKey = 'tennis' | 'elpaso' | 'uva' | 'grad1' | 'grad2' | 'ucla' | 'now' | 'sea' | 'camera' | 'hike';
 export type MachineKey = 'report' | 'semg' | 'desk';
 export type HobbyKey = 'tennis' | 'gym' | 'reading' | 'photo';
 export type ContactKind = 'mail' | 'linkedin' | 'instagram';
@@ -139,6 +140,11 @@ export interface StationCopy {
   /** No punctuation in titles; a space stands in for the pause. */
   readonly title: string;
   readonly lead: Rich;
+  /** On a wide screen the lead and each passage keep to one line apiece instead of wrapping. */
+  readonly singleLines?: boolean;
+  /** Ink sketches of the place, drawn at build time; the note is read out, not shown. */
+  readonly sketches?: ReadonlyArray<{ readonly key: WestLakeKey; readonly name: string; readonly note: string }>;
+  readonly sketchesLabel?: string;
   readonly school?: SchoolRecord;
   readonly passages?: readonly Passage[];
   readonly paper?: PaperSheet;
@@ -161,7 +167,15 @@ export const JOURNEY_ZH = {
       when: '起点',
       place: '浙江杭州',
       title: '在杭州长大',
-      lead: ['高一那年，', { b: '第一次一个人飞过太平洋' }, '，去美国读高中。'],
+      lead: [{ b: '最忆是杭州' }],
+      sketchesLabel: '西湖五景，水墨简笔',
+      sketches: [
+        { key: 'duanqiao', name: '断桥残雪', note: '雪后桥背先化，远看像断了' },
+        { key: 'santan', name: '三潭印月', note: '湖心三座小石塔，月夜里塔窗映月' },
+        { key: 'leifeng', name: '雷峰夕照', note: '夕阳落在雷峰塔后面' },
+        { key: 'sudi', name: '苏堤春晓', note: '春天清早的长堤，柳树和桃花' },
+        { key: 'quyuan', name: '曲院风荷', note: '夏天的荷叶和荷花' },
+      ],
     },
     {
       id: 'el-paso',
@@ -196,8 +210,10 @@ export const JOURNEY_ZH = {
       place: '弗吉尼亚州，Miller School of Albemarle',
       title: '用数据回答一个问题',
       lead: ['高中的最后两年。自己提出一个问题，再', { b: '找数据去回答它' }, '。'],
+      singleLines: true,
       passages: [
-        { text: ['以 ', { b: 'Valedictorian' }, '（毕业生代表）身份毕业。课余带 Animal Adventure 社团：办濒危物种讲座，种树、钓鱼、徒步。'] },
+        { text: ['以 ', { b: 'Valedictorian' }, '（毕业生代表）身份毕业。'] },
+        { text: ['课余带 Animal Adventure 社团：办濒危物种讲座，种树、钓鱼、徒步。'] },
       ],
       paper: {
         venue: 'European Journal of Biomedical and Life Sciences',
@@ -269,6 +285,7 @@ export const JOURNEY_ZH = {
       },
       photos: [
         { key: 'uva', alt: '穿着学位服站在弗吉尼亚大学 Rotunda 前', caption: '毕业那天' },
+        { key: 'grad1', alt: '和一位朋友披着毕业肩带，站在红砖楼前的树下', caption: '一起毕业' },
         { key: 'grad2', alt: '和同学站在 2025 届的气球前', caption: '2025 届' },
       ],
     },
@@ -332,7 +349,7 @@ export const JOURNEY_ZH = {
       title: '监管文件里的一个问题 怎样得到能溯源的答案',
       lead: ['SDG&E 是圣地亚哥的燃气电力公司。它的监管信息一半在很厚的 PDF 里，一半在十几张数据表里，一个问题常常两边都要查，还要算数。'],
       machine: 'desk',
-      result: { label: '查数字时，第一条就答对的比例', from: '一成出头', to: '四分之三' },
+      result: { label: '查数字时，第一条就答对的比例', from: '11.7%', to: '75.0%' },
     },
     {
       id: 'next',

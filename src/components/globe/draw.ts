@@ -2,6 +2,7 @@ import { geoGraticule10, geoOrthographic, geoPath } from 'd3-geo';
 import type { GeoPermissibleObjects } from 'd3-geo';
 import { LEGS, STATIONS } from '../../lib/journey';
 import type { LegKind, StationId } from '../../lib/journey';
+import { BORDERS } from './borders';
 import { LAND } from './land';
 import { createProjector, toUnitVector } from './sphere';
 import type { SphereView, UnitVector } from './sphere';
@@ -14,6 +15,7 @@ export interface GlobePalette {
   readonly graticule: string;
   readonly land: string;
   readonly landMode: LandMode;
+  readonly border: string;
   readonly study: string;
   readonly work: string;
   readonly station: string;
@@ -28,6 +30,8 @@ const STATION_RING_WIDTH = 1.6;
 const DOT_RADIUS = 1.45;
 const DOT_ALPHA = 0.55;
 const DOT_MIN_DEPTH = 0.05;
+/** Province and state lines: a hairline, there to be noticed only on a closer look. */
+const BORDER_WIDTH = 0.8;
 const WORK_DASH: readonly [number, number] = [1, 7];
 const LIMB_SHADE_CENTER: readonly [number, number] = [-0.16, -0.24];
 /** Road not yet travelled stays on the map, but only faintly. */
@@ -74,6 +78,7 @@ export function readPalette(element: Element): GlobePalette {
     graticule: read('--globe-graticule'),
     land: read('--globe-land'),
     landMode: read('--globe-land-mode') === 'dots' ? 'dots' : 'fill',
+    border: read('--globe-border'),
     study: read('--color-study'),
     work: read('--color-work'),
     station: read('--globe-station'),
@@ -137,6 +142,13 @@ export function createGlobePainter(ctx: CanvasRenderingContext2D): GlobePainter 
       ctx.fill();
       ctx.globalAlpha = 1;
     }
+
+    ctx.beginPath();
+    path(BORDERS);
+    ctx.lineWidth = Math.max(0.5, BORDER_WIDTH * scale);
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = palette.border;
+    ctx.stroke();
 
     ctx.lineWidth = Math.max(1.4, ROUTE_WIDTH * scale);
     ctx.lineCap = 'round';

@@ -7,14 +7,14 @@ interface Props {
 }
 
 /** The forest plot's own units: ratios run along x, one row per estimate. */
-const PLOT = { width: 260, rowHeight: 26, left: 6, right: 254, from: 0.9, to: 1.8 };
+const PLOT = { width: 232, rowHeight: 38, left: 4, right: 226, from: 0.9, to: 1.8 };
 const AXIS_TICKS = [1, 1.2, 1.4, 1.6, 1.8];
 
 const { paper } = Astro.props;
 const estimates = paper.estimates ?? [];
 const isLatin = /^[\x20-\x7E]+$/.test(paper.title);
 const xOf = (ratio: number): number => PLOT.left + ((ratio - PLOT.from) / (PLOT.to - PLOT.from)) * (PLOT.right - PLOT.left);
-const plotHeight = estimates.length * PLOT.rowHeight + 22;
+const plotHeight = estimates.length * PLOT.rowHeight + 26;
 const axisY = estimates.length * PLOT.rowHeight + 4;
 ---
 
@@ -41,16 +41,16 @@ const axisY = estimates.length * PLOT.rowHeight + 4;
         {AXIS_TICKS.map((tick) => (
           <g>
             <line class="paper__axis" x1={xOf(tick)} y1={axisY} x2={xOf(tick)} y2={axisY + 4} />
-            <text class="paper__tick" x={xOf(tick)} y={axisY + 15}>{tick.toFixed(1)}</text>
+            <text class="paper__tick" x={xOf(tick)} y={axisY + 17}>{tick.toFixed(1)}</text>
           </g>
         ))}
         {estimates.map((estimate, index) => {
-          const y = index * PLOT.rowHeight + 15;
+          const y = index * PLOT.rowHeight + 22;
           return (
             <g>
-              <text class="paper__label" x={PLOT.left} y={y - 7}>{estimate.label}  {estimate.ratio.toFixed(2)}</text>
+              <text class="paper__label" x={PLOT.left} y={y - 9}>{estimate.label}  {estimate.ratio.toFixed(2)}</text>
               <line class="paper__interval" x1={xOf(estimate.low)} y1={y} x2={xOf(estimate.high)} y2={y} />
-              <circle class="paper__point" cx={xOf(estimate.ratio)} cy={y} r="4" />
+              <circle class="paper__point" cx={xOf(estimate.ratio)} cy={y} r="4.5" />
             </g>
           );
         })}
@@ -116,7 +116,7 @@ const axisY = estimates.length * PLOT.rowHeight + 4;
   /* With a plot, the abstract runs beside it, the way a figure sits in a column. */
   .paper__main--plot {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 12.5rem;
+    grid-template-columns: minmax(0, 1fr) 14.5rem;
     gap: 6px 22px;
     align-items: start;
   }
@@ -175,7 +175,7 @@ const axisY = estimates.length * PLOT.rowHeight + 4;
   .paper__tick,
   .paper__label {
     fill: var(--color-paper-soft);
-    font-size: 10px;
+    font-size: 12px;
     font-variant-numeric: tabular-nums;
   }
 
@@ -185,12 +185,13 @@ const axisY = estimates.length * PLOT.rowHeight + 4;
 
   .paper__label {
     fill: var(--color-paper-ink);
-    font-size: 11px;
+    font-size: 13.5px;
+    font-weight: 600;
   }
 
   .paper__plot figcaption {
-    margin-top: 6px;
-    font-size: 0.75rem;
+    margin-top: 8px;
+    font-size: 0.875rem;
     line-height: 1.5;
     color: var(--color-paper-soft);
   }

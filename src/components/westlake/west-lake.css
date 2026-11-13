@@ -1,0 +1,90 @@
+/* 最忆是杭州: five ink sketches, three over two, the lower row set half a sketch in like leaves of an album.
+   Each sketch is drawn in the page's own ink, so it turns light at night; the seal, the sun and the
+   blossom keep their colours, a little brighter in the dark. */
+
+.west-lake {
+  --sketch-width: clamp(9.5rem, min(14vw, 26svh), 13.75rem);
+  --sketch-gap: 16px;
+  --ink-paper: var(--color-bg);
+  display: grid;
+  grid-template-columns: repeat(3, var(--sketch-width));
+  gap: 2px var(--sketch-gap);
+  width: max-content;
+  max-width: none;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-ink);
+}
+
+.west-lake li:nth-child(n + 4) {
+  translate: calc((var(--sketch-width) + var(--sketch-gap)) / 2) 0;
+}
+
+.west-lake figure {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+}
+
+/* Each sketch lies on a patch of paper that fades into the map, so the ink never sits on the globe's land. */
+.west-lake figure::before {
+  content: '';
+  position: absolute;
+  inset: -8% -10% -6%;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--color-bg) 64%, transparent);
+  pointer-events: none;
+}
+
+.west-lake__ink {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.west-lake figcaption {
+  margin-top: -4px;
+  font-family: var(--font-hand);
+  font-size: 1.1875rem;
+  line-height: 1.2;
+  color: var(--color-ink-soft);
+}
+
+.west-lake figcaption b {
+  font-weight: 400;
+}
+
+.west-lake__note {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:root[data-theme='night'] .west-lake {
+  --ink-red: #e0603f;
+  --ink-pink: #e8909b;
+  --ink-moon: #f6e7c4;
+}
+
+/* Phones: two to a row, the fifth centred under them. */
+@media (max-width: 820px) {
+  .west-lake {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 8px 14px;
+  }
+
+  .west-lake li:nth-child(n + 4) {
+    translate: none;
+  }
+
+  .west-lake li:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 7px);
+  }
+}

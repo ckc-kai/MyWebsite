@@ -6,8 +6,10 @@ import './flagship.css';
 
 const copy = FLAGSHIP_ZH.report;
 const figure = buildPipelineFigure();
-/** The bench leaves empty headroom above the chart board; at this width it is better trimmed. */
-const HEADROOM = 60;
+/** The bench leaves empty room above the chart board and below its front edge; both are trimmed (the bottom keeps its shadow). */
+const HEADROOM = 64;
+const FOOTROOM = 56;
+const VIEW_HEIGHT = FIGURE_SIZE.height - HEADROOM - FOOTROOM;
 ---
 
 <div
@@ -16,17 +18,25 @@ const HEADROOM = 60;
   data-stops={JSON.stringify(figure.stops)}
   data-running="false"
   data-no-drag
-  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px`}
+  style={`--travel-x: ${figure.travel[0]}px; --travel-y: ${figure.travel[1]}px; --flag-aspect: ${FIGURE_SIZE.width / VIEW_HEIGHT}`}
 >
   <header class="figure__label">
     <h3>{copy.title}</h3>
-    <p>{copy.hint}</p>
   </header>
 
+  <div class="flag__main">
   <div class="flag__drawing iso" data-globe-clear>
-    <svg class="iso-svg" viewBox={`0 ${HEADROOM} ${FIGURE_SIZE.width} ${FIGURE_SIZE.height - HEADROOM}`} aria-hidden="true" set:html={figure.svg} />
+    <svg class="iso-svg" viewBox={`0 ${HEADROOM} ${FIGURE_SIZE.width} ${VIEW_HEIGHT}`} aria-hidden="true" set:html={figure.svg} />
   </div>
   <p class="flag__swipe">{FLAGSHIP_ZH.swipe}</p>
+  <p class="flag__figcaption">
+    {copy.schedule}
+    <span class="flag__spec flag__spec--inline">{copy.scheduleSpec}</span>
+  </p>
+  <div class="flag__cue">
+    <p class="flag__hint">{copy.hint}</p>
+    <button type="button" class="figure__run" data-run>{copy.run}</button>
+  </div>
 
   <ol class="flag__stepper">
     {copy.stages.map((stage, index) => (
@@ -39,7 +49,9 @@ const HEADROOM = 60;
     ))}
   </ol>
 
-  <div class="flag__panels" data-globe-clear>
+  </div>
+
+  <div class="flag__side" data-globe-clear>
     <section class="flag__info" aria-live="polite">
       {copy.stages.map((stage, index) => (
         <article data-step-text={index} hidden={index !== 0}>
@@ -51,7 +63,6 @@ const HEADROOM = 60;
           </p>
         </article>
       ))}
-      <button type="button" class="figure__run" data-run>{copy.run}</button>
     </section>
 
     <section class="flag__aside">
@@ -64,10 +75,6 @@ const HEADROOM = 60;
     </section>
   </div>
 
-  <p class="figure__note">
-    {copy.schedule}
-    <span class="flag__spec flag__spec--inline">{copy.scheduleSpec}</span>
-  </p>
 </div>
 
 <script>

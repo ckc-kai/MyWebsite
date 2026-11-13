@@ -8,6 +8,7 @@ import '@fontsource/noto-serif-sc/900.css';
 import '@fontsource/long-cang/400.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import InkSelection from '../components/site/InkSelection.astro';
 import { DAY_START_HOUR, NIGHT_START_HOUR, THEME_STORAGE_KEY } from '../lib/theme';
 
 interface Props {
@@ -47,5 +48,6 @@ const { title, description, lang } = Astro.props;
   </head>
   <body>
     <slot />
+    <InkSelection />
   </body>
 </html>

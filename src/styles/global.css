@@ -51,9 +51,58 @@ button {
   color: inherit;
 }
 
-::selection {
-  background: var(--color-marker);
+/* Without the highlighter layer (no script, forced colours) selection is a flat band of the same ink. */
+:root:not([data-ink-select]) ::selection {
+  background: var(--ink-select);
   color: var(--color-ink);
+}
+
+/* With it, the browser's box goes clear and the strokes are drawn over the text (InkSelection.astro).
+   Multiplied by day, so dark letters stay dark under the ink; screened at night, so light letters stay light. */
+:root[data-ink-select] ::selection {
+  background-color: transparent;
+}
+
+.ink-select {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme='night'] .ink-select {
+  mix-blend-mode: screen;
+}
+
+.ink-select path {
+  fill: var(--ink-select);
+}
+
+.ink-select__pass--0 {
+  opacity: 0.62;
+}
+
+.ink-select__pass--1 {
+  opacity: 0.38;
+}
+
+/* Screened on the night sky the pen needs more body to read as orange rather than brown. */
+:root[data-theme='night'] .ink-select__pass--0 {
+  opacity: 0.8;
+}
+
+:root[data-theme='night'] .ink-select__pass--1 {
+  opacity: 0.45;
+}
+
+@media print, (forced-colors: active) {
+  .ink-select {
+    display: none;
+  }
 }
 
 :focus-visible {

@@ -1,0 +1,96 @@
+---
+/**
+ * Selected text is marked the way the rest of the page is: with a highlighter stroke, not a flat box.
+ * The browser's own selection box is made transparent and the strokes are drawn on a layer over the page.
+ * Without scripts, or with forced colours, the browser's selection stays as it is.
+ */
+---
+
+<svg class="ink-select" aria-hidden="true" focusable="false" data-ink-layer></svg>
+
+<script>
+  import { inkBandPath, lineSeed, mergeLineRects, type InkBand, type InkRect } from '../../lib/ink';
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  /** A selection of the whole page is still drawn quickly: past this many text nodes the rest is skipped. */
+  const MAX_TEXT_NODES = 800;
+  /** Two passes of the pen: a broad one, and a narrower one along the lower half that darkens where they overlap. */
+  const PASSES: readonly InkBand[] = [
+    { from: 0.18, to: 0.98 },
+    { from: 0.46, to: 0.93 },
+  ];
+  const PASS_SEED_STEP = 7919;
+
+  const layer = document.querySelector<SVGSVGElement>('[data-ink-layer]');
+
+  function selectable(node: Text, cache: Map<Element, boolean>): boolean {
+    const parent = node.parentElement;
+    if (!parent) return false;
+    const known = cache.get(parent);
+    if (known !== undefined) return known;
+    const result = getComputedStyle(parent).userSelect !== 'none';
+    cache.set(parent, result);
+    return result;
+  }
+
+  /** The boxes of the selected text only: element boxes inside a selection would paint whole blocks. */
+  function textRects(range: Range): DOMRect[] {
+    const root = range.commonAncestorContainer;
+    if (root.nodeType === Node.TEXT_NODE) return [...range.getClientRects()];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const cache = new Map<Element, boolean>();
+    const rects: DOMRect[] = [];
+    let counted = 0;
+    for (let node = walker.nextNode(); node && counted < MAX_TEXT_NODES; node = walker.nextNode()) {
+      const text = node as Text;
+      if (!range.intersectsNode(text) || !text.data.trim() || !selectable(text, cache)) continue;
+      counted += 1;
+      const part = document.createRange();
+      part.selectNodeContents(text);
+      if (text === range.startContainer) part.setStart(text, range.startOffset);
+      if (text === range.endContainer) part.setEnd(text, range.endOffset);
+      rects.push(...part.getClientRects());
+    }
+    return rects;
+  }
+
+  function draw(target: SVGSVGElement): void {
+    const selection = document.getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) {
+      if (target.childElementCount > 0) target.replaceChildren();
+      return;
+    }
+    const boxes: InkRect[] = [];
+    for (let i = 0; i < selection.rangeCount; i += 1) {
+      for (const rect of textRects(selection.getRangeAt(i))) {
+        boxes.push({ left: rect.left, top: rect.top, width: rect.width, height: rect.height });
+      }
+    }
+    const onScreen = mergeLineRects(boxes).filter((line) => line.top + line.height > 0 && line.top < innerHeight);
+    const strokes = onScreen.flatMap((line) =>
+      PASSES.map((band, pass) => {
+        const path = document.createElementNS(SVG_NS, 'path');
+        path.setAttribute('d', inkBandPath(line, lineSeed(line, scrollX, scrollY) + pass * PASS_SEED_STEP, band));
+        path.setAttribute('class', `ink-select__pass ink-select__pass--${pass}`);
+        return path;
+      }),
+    );
+    target.replaceChildren(...strokes);
+  }
+
+  if (layer && !matchMedia('(forced-colors: active)').matches) {
+    document.documentElement.dataset.inkSelect = '';
+    let frame = 0;
+    const schedule = (): void => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        draw(layer);
+      });
+    };
+    document.addEventListener('selectionchange', schedule);
+    // Capture, so a panel that scrolls on its own (the flagship explanations) moves its strokes too.
+    window.addEventListener('scroll', schedule, { passive: true, capture: true });
+    window.addEventListener('resize', schedule, { passive: true });
+  }
+</script>

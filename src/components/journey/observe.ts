@@ -21,12 +21,15 @@ function keepInView(link: HTMLElement): void {
 export function observeJourney(stage: HTMLElement): () => void {
   const stops = [...stage.querySelectorAll<HTMLElement>('[data-stop]')];
   const railLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-rail]')];
+  const boards = [...stage.querySelectorAll<HTMLElement>('[data-prints-for]')];
 
   const arrive = (id: string, layout: string | undefined): void => {
     if (stage.dataset.active === id) return;
     stage.dataset.active = id;
     // Where a machine takes the floor, the globe steps back behind it.
     stage.dataset.quiet = String(layout === 'machine');
+    // Only the stop being read lays its photographs on the globe.
+    for (const board of boards) board.toggleAttribute('data-shown', board.dataset.printsFor === id);
 
     const position = railLinks.findIndex((link) => link.dataset.rail === id);
     railLinks.forEach((link, index) => {
