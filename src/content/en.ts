@@ -12,7 +12,7 @@ export const SITE_EN: SiteCopy = {
   nameAltLang: 'zh-CN',
   title: 'Kaicheng Chu 褚开诚',
   description:
-    'Kaicheng Chu: Master of Engineering in Data Science at UCLA, graduating December 2026, looking for work in AI. A résumé you can walk through.',
+    'Kaicheng Chu: Master of Engineering in Data Science at UCLA, graduating December 2026, looking for full-time roles in AI. A résumé you can walk through.',
   motto: 'Sapere aude',
   mottoGloss: 'Think it through, then go all the way',
   navGlance: 'Quick look',
@@ -28,8 +28,8 @@ export const SITE_EN: SiteCopy = {
 };
 
 export const OPENING_EN: OpeningCopy = {
-  headline: { before: 'Define what ', decided: 'right', afterDecided: ' looks like', then: 'then ', built: 'build it' },
-  deck: 'Master of Engineering in Data Science at UCLA, graduating December 2026 and looking for work in AI. The globe maps the road that got me here.',
+  headline: { before: 'Define what ', decided: 'is', afterDecided: ' right', then: 'then ', built: 'build it' },
+  deck: 'Master of Engineering in Data Science at UCLA, graduating December 2026 and looking for full-time roles in AI. The globe maps the road that got me here.',
   workTitle: 'Recent work',
   work: [
     {

@@ -101,7 +101,7 @@ export const FLAGSHIP_ZH: FlagshipCopy = {
         id: 'pdf',
         name: '读 PDF',
         who: ['code'],
-        text: '三只读头，从快到慢。普通的页直接读出文字和书签；版面复杂的页交给会认版面和表格的工具；最难的表格和图片，交给会看图的模型转述成文字。每个标题从哪一页的哪里开始、到哪里结束，靠字号、粗细、位置和编号一起判断，再和书签互相补齐。',
+        text: '三种类型数据，从快到慢。普通的页直接读出文字和书签；版面复杂的页交给会认版面和表格的工具；最难的表格和图片，交给会看图的模型转述成文字。每个标题从哪一页的哪里开始、到哪里结束，靠字号、粗细、位置和编号一起判断，再和书签互相补齐。',
         spec: 'pypdf → Docling → VLM · 书签层级 + 位置感知的标题边界 · 表格转 Markdown · 文本覆盖率校验',
       },
       {
@@ -318,7 +318,7 @@ export const FLAGSHIP_ZH: FlagshipCopy = {
         spec: 'BERTScore + numerical consistency + evidence grounding',
       },
     ],
-    schedule: '整条线每天定时自己跑一遍：上了锁，同一类任务同时只跑一个；上游写完「完成」的旗子，下游才开始；重跑不会重复入库。',
+    schedule: '整条线每天定时自己跑一遍：上了锁，同一类任务同时只跑一个；上游写完「完成」的done标记，下游才开始；重跑不会重复入库。',
     scheduleSpec: 'crontab · flock · done 标记 · 幂等',
   },
 };
