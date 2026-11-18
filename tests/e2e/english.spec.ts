@@ -15,7 +15,7 @@ test.describe('the English page', () => {
   test('is marked as American English and named for the English reader', async ({ page }) => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en-US');
     await expect(page).toHaveTitle(/Kaicheng Chu/);
-    await expect(page.locator('.opening h1')).toHaveText(/Define what right looks like\s*then build it/);
+    await expect(page.locator('.opening h1')).toHaveText(/Define what is right\s*then build it/);
     await expect(page.locator('link[rel=alternate][hreflang=zh-CN]')).toHaveAttribute('href', 'https://ckc-kai.github.io/MyWebsite/');
   });
 

@@ -1,0 +1,51 @@
+# Checks every pull request before it can be merged into main.
+# Deploying is deploy.yml's job; this file only answers "is this change safe to merge?".
+name: CI
+
+on:
+  pull_request:
+
+# A new push to the same PR cancels the run still checking the old commit.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Types, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # .astro/ is git-ignored; astro sync writes the types tsc needs.
+      - run: npx astro sync
+      - run: npx tsc --noEmit
+      - run: npm test
+      - run: npm run build
+
+  e2e:
+    name: End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # GitHub's Ubuntu machines already have Google Chrome, which playwright.config.ts asks for.
+      - run: npx playwright test
+      # When a test fails, keep its screenshots and page snapshots for a week to look at.
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
